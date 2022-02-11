@@ -1,3 +1,12 @@
+DROP TABLE IF EXISTS "business_attribute";
+DROP TABLE IF EXISTS "business_category";
+DROP TABLE IF EXISTS "business_hour";
+DROP TABLE IF EXISTS "tips";
+DROP TABLE IF EXISTS "checkin";
+DROP TABLE IF EXISTS "user_follow";
+DROP TABLE IF EXISTS "business";
+DROP TABLE IF EXISTS "user";
+
 CREATE TABLE "business" (
   "business_id" varchar(22) PRIMARY KEY,
   "name" varchar(255),
