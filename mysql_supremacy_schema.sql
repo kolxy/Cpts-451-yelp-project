@@ -77,6 +77,10 @@ CREATE TABLE "tips" (
 CREATE TABLE  "checkin" (
   "business_id" varchar(22),
   "timestamp" timestamp(6),
+  "year" int8,
+  "month" int8,
+  "day" int8,
+  "clock_time" time,
   PRIMARY KEY ("business_id", "timestamp"),
   FOREIGN KEY ("business_id") REFERENCES "business"("business_id")
   ON DELETE CASCADE
