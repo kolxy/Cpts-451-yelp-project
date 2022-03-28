@@ -197,7 +197,7 @@ def db_connect():
     cur = conn.cursor()
     return cur, conn
 
-def db_close():
+def db_close(cur, conn):
     cur.close()
     conn.close()
 
