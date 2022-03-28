@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YelpMain", "YelpMain\YelpMain.csproj", "{0716379F-3B33-434C-9916-CB4BA70A7DB3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FC0269E0-3BDD-44BB-AAAD-3C415AF77653} = {FC0269E0-3BDD-44BB-AAAD-3C415AF77653}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YelpQueryEngine", "YelpQueryEngine\YelpQueryEngine.csproj", "{FC0269E0-3BDD-44BB-AAAD-3C415AF77653}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0716379F-3B33-434C-9916-CB4BA70A7DB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0716379F-3B33-434C-9916-CB4BA70A7DB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0716379F-3B33-434C-9916-CB4BA70A7DB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0716379F-3B33-434C-9916-CB4BA70A7DB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC0269E0-3BDD-44BB-AAAD-3C415AF77653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0269E0-3BDD-44BB-AAAD-3C415AF77653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0269E0-3BDD-44BB-AAAD-3C415AF77653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0269E0-3BDD-44BB-AAAD-3C415AF77653}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56A18B20-0647-48F3-99B9-BE37F1E12E64}
+	EndGlobalSection
+EndGlobal
