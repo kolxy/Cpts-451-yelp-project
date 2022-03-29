@@ -15,17 +15,17 @@
                 <Grid Background="#FFE5E5E5" Margin="-15,-4,1,-5">
                     <GroupBox Header="Select Location" HorizontalAlignment="Left" Height="234" Margin="10,10,0,0" VerticalAlignment="Top" Width="222">
                         <Grid HorizontalAlignment="Left" Height="224" Margin="0,0,-2,-12" VerticalAlignment="Top" Width="212">
-                            <ComboBox HorizontalAlignment="Left" Margin="42,14,0,0" VerticalAlignment="Top" Width="158"/>
+                            <ComboBox x:Name="stateList" HorizontalAlignment="Left" Margin="42,14,0,0" VerticalAlignment="Top" Width="158" SelectionChanged="stateList_SelectionChanged"/>
                             <Label Content="State" HorizontalAlignment="Left" Margin="3,10,0,0" VerticalAlignment="Top"/>
                             <Label Content="City" HorizontalAlignment="Left" Margin="3,35,0,0" VerticalAlignment="Top"/>
-                            <ListBox HorizontalAlignment="Left" Height="66" Margin="10,60,0,0" VerticalAlignment="Top" Width="195"/>
+                            <ListBox x:Name="cityList" HorizontalAlignment="Left" Height="66" Margin="10,60,0,0" VerticalAlignment="Top" Width="195" SelectionChanged="cityList_SelectionChanged"/>
                             <Label Content="Zipcode" HorizontalAlignment="Left" Margin="3,126,0,0" VerticalAlignment="Top"/>
-                            <ListBox HorizontalAlignment="Left" Height="52" Margin="10,156,0,0" VerticalAlignment="Top" Width="195"/>
+                            <ListBox x:Name="zipList" HorizontalAlignment="Left" Height="52" Margin="10,156,0,0" VerticalAlignment="Top" Width="195" SelectionChanged="zipList_SelectionChanged"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Business Category" HorizontalAlignment="Left" Height="529" Margin="10,244,0,0" VerticalAlignment="Top" Width="222">
                         <Grid HorizontalAlignment="Left" Height="507" Margin="0,0,-2,0" VerticalAlignment="Top" Width="212">
-                            <ListBox HorizontalAlignment="Left" Height="295" Margin="10,10,0,0" VerticalAlignment="Top" Width="192"/>
+                            <ListBox x:Name="businessCatList" HorizontalAlignment="Left" Height="295" Margin="10,10,0,0" VerticalAlignment="Top" Width="192"/>
                             <Button Content="Add" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="88" Height="24"/>
                             <Button Content="Remove" HorizontalAlignment="Left" Margin="114,310,0,0" VerticalAlignment="Top" Width="88" Height="24"/>
                             <ListBox HorizontalAlignment="Left" Height="117" Margin="10,339,0,0" VerticalAlignment="Top" Width="192"/>
