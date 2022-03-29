@@ -26,16 +26,16 @@
                     <GroupBox Header="Business Category" HorizontalAlignment="Left" Height="529" Margin="10,244,0,0" VerticalAlignment="Top" Width="222">
                         <Grid HorizontalAlignment="Left" Height="507" Margin="0,0,-2,0" VerticalAlignment="Top" Width="212">
                             <ListBox x:Name="businessCatList" HorizontalAlignment="Left" Height="295" Margin="10,10,0,0" VerticalAlignment="Top" Width="192"/>
-                            <Button Content="Add" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="88" Height="24"/>
-                            <Button Content="Remove" HorizontalAlignment="Left" Margin="114,310,0,0" VerticalAlignment="Top" Width="88" Height="24"/>
-                            <ListBox HorizontalAlignment="Left" Height="117" Margin="10,339,0,0" VerticalAlignment="Top" Width="192"/>
-                            <Button Content="Search Business" HorizontalAlignment="Left" Margin="10,461,0,-37" VerticalAlignment="Top" Width="192" Height="32"/>
+                            <Button x:Name="addCatBtn" Content="Add" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="88" Height="24" Click="addCatBtn_Click"/>
+                            <Button x:Name="removeCatBtn" Content="Remove" HorizontalAlignment="Left" Margin="114,310,0,0" VerticalAlignment="Top" Width="88" Height="24" Click="removeCatBtn_Click"/>
+                            <ListBox x:Name="selectedCatList" HorizontalAlignment="Left" Height="117" Margin="10,339,0,0" VerticalAlignment="Top" Width="192"/>
+                            <Button x:Name="searchBusBtn" Content="Search Business" HorizontalAlignment="Left" Margin="10,461,0,-37" VerticalAlignment="Top" Width="192" Height="32" Click="searchBusBtn_Click"/>
 
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Search Results" HorizontalAlignment="Left" Height="488" Margin="248,10,0,0" VerticalAlignment="Top" Width="856">
                         <Grid HorizontalAlignment="Left" Margin="10,10,-2,-22" Width="836">
-                            <DataGrid HorizontalAlignment="Left" Height="428" VerticalAlignment="Top" Width="826"/>
+                            <DataGrid x:Name="businessInfoTable" HorizontalAlignment="Left" Height="428" VerticalAlignment="Top" Width="826"/>
                             <Label Content="# of businesses: " HorizontalAlignment="Left" Margin="565,429,0,0" VerticalAlignment="Top"/>
                             <TextBlock HorizontalAlignment="Left" Margin="674,434,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="21" Width="80"/>
                         </Grid>
