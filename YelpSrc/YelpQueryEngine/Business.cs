@@ -14,7 +14,7 @@ namespace YelpQueryEngine
         public string state { get; set; }
         public string zipcode { get; set; }
         public string address { get; set; }
-        public float starts { get; set; }
+        public float stars { get; set; }
         public double latitude { get; set; }
         public double longitude { get; set; }
         public Int64 num_checkings { get; set; }

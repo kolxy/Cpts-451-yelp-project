@@ -11,14 +11,14 @@ namespace YelpQueryEngine
         public static Dictionary<string, string> getBusinessInfoTableHeaderNameAndBinder()
         {
             Dictionary<string, string> colNameBinding = new Dictionary<string, string>();
-            colNameBinding.Add("Business Name", "businessName");
+            colNameBinding.Add("Business Name", "name");
             colNameBinding.Add("Address", "address");
             colNameBinding.Add("City", "city");
             colNameBinding.Add("State", "state");
             colNameBinding.Add("Distance (miles)", "distance");
             colNameBinding.Add("Stars", "stars");
-            colNameBinding.Add("# of Tips", "numTip");
-            colNameBinding.Add("Total Checkins", "totalCheckins");
+            colNameBinding.Add("# of Tips", "num_tips");
+            colNameBinding.Add("Total Checkins", "num_checkings");
             colNameBinding.Add("bid", "business_id");
             return colNameBinding;
         }

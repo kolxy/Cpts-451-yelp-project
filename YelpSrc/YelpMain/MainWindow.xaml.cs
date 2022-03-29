@@ -162,25 +162,32 @@ namespace YelpMain
         /// <param name="e"></param>
         private void searchBusBtn_Click(object sender, RoutedEventArgs e)
         {
-            StringBuilder sb = new StringBuilder();
-            
-            if (selectedCatList.SelectedIndex < 0)
+            // if no item in selectedCatList return.
+            if (selectedCatList.Items.Count < 0)
             {
                 return;
             }
-            sb.Append($"select * from business where" +
-                $" state = '{stateList.SelectedItem.ToString()}' and city = '{cityList.SelectedItem.ToString()}'" +
-                $" and zipcode = '{zipList.SelectedItem.ToString()}' and business.business_id in (select business_id from business_category where ");
-            
-            foreach (var item in selectedCatList.Items){
-                sb.Append($" '{item.ToString()}') ");
-            }
 
-            string sqlstr = sb.ToString();
-            Utils.executeQuery(sqlstr, showSearchResult);
+            // shows all of busienss with state, city, zipcode provided
+            string sql1 = $"select * from business where" +
+                $" state = '{stateList.SelectedItem.ToString()}' and city = '{cityList.SelectedItem.ToString()}'" +
+                $" and zipcode = '{zipList.SelectedItem.ToString()}'";
+
+            // shows all business_id that with category selected.
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select business_id from business_category where name in (select name from business_category where name = " + selectedCatList.Items[0].ToString());
+             
+            for(int i = 1; i < selectedCatList.Items.Count; i++)
+            {
+                sb.Append(" and name = " + selectedCatList.Items[i].ToString() + ")");
+            }
+            string sql2 = sb.ToString();
+            string sqlstr = $"'{sql1} and business_id in ('{sql2}')";
+            Utils.executeQuery(sqlstr, showResult);
+
         }
 
-        private void showSearchResult(NpgsqlDataReader reader)
+        private void showResult(NpgsqlDataReader reader)
         {
             Business bus = new Business();
             bus.business_id = reader.GetString(0);
@@ -189,7 +196,7 @@ namespace YelpMain
             bus.state = reader.GetString(3);
             bus.zipcode = reader.GetString(4);
             bus.address = reader.GetString(5);
-            bus.starts = reader.GetFloat(6);
+            bus.stars = reader.GetFloat(6);
             bus.latitude = reader.GetDouble(7);
             bus.longitude = reader.GetDouble(8);
             bus.num_checkings = reader.GetInt64(9);
