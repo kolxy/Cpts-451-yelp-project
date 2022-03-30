@@ -2,6 +2,16 @@ import json
 from tabnanny import check
 import psycopg2
 import collections
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+dbname = os.getenv("DBNAME")
+user = os.getenv("USER")
+host = os.getenv("HOST")
+password = os.getenv("PASSWORD")
+print("HELLO")
+print(password)
 
 def cleanStr4SQL(s):
     return s.replace("'","`").replace("\n"," ")
@@ -191,7 +201,7 @@ def insert_tip_data(cur, conn):
 def db_connect():
     conn = None
     try:
-        conn = psycopg2.connect("dbname='yelp451' user='postgres' host='localhost' password='123456'")
+        conn = psycopg2.connect(dbname = dbname, user = user, host = host, password = password)
     except:
         print('Unable to connect to the database!')
     cur = conn.cursor()

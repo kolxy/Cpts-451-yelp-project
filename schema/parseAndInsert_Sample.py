@@ -4,6 +4,16 @@
 #  if psycopg2 is not installed, install it using pip installer :  pip install psycopg2  (or pip3 install psycopg2) 
 import json
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+dbname = os.getenv("DBNAME")
+user = os.getenv("USER")
+host = os.getenv("HOST")
+password = os.getenv("PASSWORD")
+print("HELLO")
+print(password)
 
 def cleanStr4SQL(s):
     return s.replace("'","`").replace("\n"," ")
@@ -55,6 +65,5 @@ def insert2BusinessTable():
     print(count_line)
     #outfile.close()  #uncomment this line if you are writing the INSERT statements to an output file.
     f.close()
-
 
 insert2BusinessTable()
