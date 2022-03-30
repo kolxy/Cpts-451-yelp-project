@@ -1,4 +1,4 @@
-data/yelp_*.JSON
+yelp_*.JSON
 output/*.txt
 sample-output/
 
