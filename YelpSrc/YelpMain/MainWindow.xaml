@@ -37,7 +37,7 @@
                         <Grid HorizontalAlignment="Left" Margin="10,10,-2,-22" Width="836">
                             <DataGrid x:Name="businessInfoTable" HorizontalAlignment="Left" Height="428" VerticalAlignment="Top" Width="826"/>
                             <Label Content="# of businesses: " HorizontalAlignment="Left" Margin="565,429,0,0" VerticalAlignment="Top"/>
-                            <TextBlock HorizontalAlignment="Left" Margin="674,434,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="21" Width="80"/>
+                            <TextBlock x:Name="busCnt" HorizontalAlignment="Left" Margin="674,434,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="21" Width="80"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Selected Business" HorizontalAlignment="Left" Height="270" Margin="248,503,0,0" VerticalAlignment="Top" Width="856">
