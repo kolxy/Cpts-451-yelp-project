@@ -13,7 +13,7 @@ pip3 install -r requirements.txt
 ### Step 2
 Modify `.env` file in root directory depending on your database setup.
 ### Step 3
-To import data into DB, first make sure data files are saved in `$PATH/Milestone2/data/`, then running the following commands.
+To import data into DB, first make sure data files are saved in `./data/`, then running the following commands.
 ```bash
 cd schema
 python mysql_supremacy_parseandinsert.py
