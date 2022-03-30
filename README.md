@@ -14,16 +14,16 @@ pip3 install -r requirements.txt
 Modify `.env` file in root directory depending on your database setup.
 
 ### Step 3
-Import the `./schema/tables.sql` file into your database to create tables.
+Import the `./DBSchema/mysql_supremacy_RELATIONS_v2.sql` file into your database to create tables.
 
 ### Step 4
 To load data into DB, first make sure data files are saved in `./data/`, then running the following commands.
 ```bash
-cd schema
-python parse_insert.py
+cd DBPopulate
+python mysql_supremacy_parseAndInsert.py
 ```
 or for Mac users
 ```bash
-cd schema
-python3 parse_insert.py
+cd DBPopulate
+python3 mysql_supremacy_parseAndInsert.py
 ```
