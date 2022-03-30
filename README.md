@@ -1,7 +1,25 @@
 # Yelp Dataset for CptS 451 Spring 2022 Term Project
 
-Data source <https://github.com/WSU-CptS451-Spring2022/YelpDataset/>
-
-* `yelp_CptS451_2022.zip` : Yelp dataset for the CptS 451 term project.  This dataset is a subset of the original Yelp dataset and it is filtered and cleaned to remove inconsistencies. 
-* `parseJSON_sample.py` : Sample code for parsing Yelp data
-* `yelpdata_sampleoutput.zip` : Sample parsed output of the given Yelp dataset. 
+## Import data
+### Step 1
+Install all of python modules required for parsing and inserting
+```bash
+pip install -r requirements.txt
+```
+or for Mac users
+```bash
+pip3 install -r requirements.txt
+```
+### Step 2
+Modify `.env` file in root directory depending on your database setup.
+### Step 3
+To import data into DB, first make sure data files are saved in `$PATH/Milestone2/data/`, then running the following commands.
+```bash
+cd schema
+python mysql_supremacy_parseandinsert.py
+```
+or for Mac users
+```bash
+cd schema
+python3 mysql_supremacy_parseandinsert.py
+```
