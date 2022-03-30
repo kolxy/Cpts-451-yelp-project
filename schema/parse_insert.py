@@ -10,14 +10,14 @@ dbname = os.getenv("DBNAME")
 user = os.getenv("USER")
 host = os.getenv("HOST")
 password = os.getenv("PASSWORD")
-print("HELLO")
-print(password)
+port = os.getenv("PORT")
+data_directory = os.path.dirname(__file__) + "/../data/"
 
 def cleanStr4SQL(s):
     return s.replace("'","`").replace("\n"," ")
 
 def insert_business_data(cur, conn): 
-    with open('./data/yelp_business.JSON','r') as f:
+    with open(data_directory + 'yelp_business.JSON','r') as f:
         line = f.readline()
         count_line = 0
         while line:
@@ -92,7 +92,7 @@ def parseHours(dic):
     return res
 
 def insert_user_data(cur, conn):
-    with open('./data/yelp_user.JSON','r') as f:  
+    with open(data_directory + 'yelp_user.JSON','r') as f:  
         line = f.readline()
         count_line = 0
         while line:
@@ -116,7 +116,7 @@ def insert_user_data(cur, conn):
 
 def insert_user_follow(cur, conn):
     # user_follow table info insert
-    with open('./data/yelp_user.JSON','r') as f:  
+    with open(data_directory + 'yelp_user.JSON','r') as f:  
         line = f.readline()
         count_line = 0
         visited = set()
@@ -143,7 +143,7 @@ def insert_user_follow(cur, conn):
     
 
 def insert_checkin_data(cur, conn):
-    with open('./data/yelp_checkin.JSON','r') as f:  
+    with open(data_directory + 'yelp_checkin.JSON','r') as f:  
         line = f.readline()
         count_line = 0
         
@@ -179,7 +179,7 @@ def parseDates( dateStr):
     return res
 
 def insert_tip_data(cur, conn):
-    with open('./data/yelp_tip.JSON','r') as f:  
+    with open(data_directory + 'yelp_tip.JSON','r') as f:  
         line = f.readline()
         count_line = 0
         while line:
@@ -201,7 +201,7 @@ def insert_tip_data(cur, conn):
 def db_connect():
     conn = None
     try:
-        conn = psycopg2.connect(dbname = dbname, user = user, host = host, password = password)
+        conn = psycopg2.connect(dbname = dbname, user = user, host = host, password = password, port = port)
     except:
         print('Unable to connect to the database!')
     cur = conn.cursor()
