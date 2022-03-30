@@ -162,29 +162,53 @@ namespace YelpMain
         /// <param name="e"></param>
         private void searchBusBtn_Click(object sender, RoutedEventArgs e)
         {
-            // if no item in selectedCatList return.
-            if (selectedCatList.Items.Count < 0)
+            businessInfoTable.Items.Clear();
+            string sqlstr = ""; // placeholder.
+
+            // reverse order check
+            // since city only appear when state selected so on so forth... we check from the bottom up using ifelse
+            if (selectedCatList.Items.Count > 0)
             {
-                return;
+                // shows all of busienss with state, city, zipcode provided
+                string sql1 = $"select * from business where" +
+                    $" state = '{stateList.SelectedItem.ToString()}' and city = '{cityList.SelectedItem.ToString()}'" +
+                    $" and zipcode = '{zipList.SelectedItem.ToString()}' and business_id in ";
+
+                List<string> cats = new List<string>();
+                foreach (var item in selectedCatList.Items)
+                {
+                    cats.Add("'" + item.ToString() + "'");
+                }
+                string string_cats = string.Join(",", cats.ToArray());
+                string sql2 = "(select business_id from business_category where name in (" + string_cats + "))";
+                sqlstr = sql1 + sql2;
+            }
+            // search zip, city, state
+            else if (zipList.SelectedIndex >= 0)
+            {
+                sqlstr = $"select * from business where" +
+                    $" state = '{stateList.SelectedItem.ToString()}' and city = '{cityList.SelectedItem.ToString()}'" +
+                    $" and zipcode = '{zipList.SelectedItem.ToString()}'";
+            }
+            // search city, state
+            else if (cityList.SelectedIndex >= 0)
+            {
+                sqlstr = $"select * from business where" +
+                    $" state = '{stateList.SelectedItem.ToString()}' and city = '{cityList.SelectedItem.ToString()}'";
+            }
+            // search state
+            else if (stateList.SelectedIndex >= 0)
+            {
+                sqlstr = $"select * from business where state = '{stateList.SelectedItem.ToString()}'";
+            }
+            // highest level, show all business
+            else
+            {
+                sqlstr = $"select * from business";
             }
 
-            // shows all of busienss with state, city, zipcode provided
-            string sql1 = $"select * from business where" +
-                $" state = '{stateList.SelectedItem.ToString()}' and city = '{cityList.SelectedItem.ToString()}'" +
-                $" and zipcode = '{zipList.SelectedItem.ToString()}'";
-
-            // shows all business_id that with category selected.
-            StringBuilder sb = new StringBuilder();
-            sb.Append("select business_id from business_category where name in (select name from business_category where name = " + selectedCatList.Items[0].ToString());
-             
-            for(int i = 1; i < selectedCatList.Items.Count; i++)
-            {
-                sb.Append(" and name = " + selectedCatList.Items[i].ToString() + ")");
-            }
-            string sql2 = sb.ToString();
-            string sqlstr = $"'{sql1} and business_id in ('{sql2}')";
             Utils.executeQuery(sqlstr, showResult);
-
+            busCnt.Text = businessInfoTable.Items.Count.ToString();
         }
 
         private void showResult(NpgsqlDataReader reader)
