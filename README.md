@@ -20,10 +20,10 @@ Import the `./schema/tables.sql` file into your database to create tables.
 To load data into DB, first make sure data files are saved in `./data/`, then running the following commands.
 ```bash
 cd schema
-python mysql_supremacy_parseandinsert.py
+python parse_insert.py
 ```
 or for Mac users
 ```bash
 cd schema
-python3 mysql_supremacy_parseandinsert.py
+python3 parse_insert.py
 ```
