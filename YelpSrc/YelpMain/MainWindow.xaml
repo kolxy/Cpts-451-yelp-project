@@ -58,7 +58,7 @@
                             <Button Content="Show Checkins" HorizontalAlignment="Left" Margin="728,23,0,0" VerticalAlignment="Top" Width="108" Height="65"/>
                             <Button Content="Show Tips" HorizontalAlignment="Left" Margin="728,109,0,0" VerticalAlignment="Top" Width="108" Height="65" Click="showTip"/>
                             <TextBlock x:Name="LabelName" HorizontalAlignment="Left" Margin="22,23,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Height="37" Width="675"/>
-                            <TextBlock x:Name="LabelAddress" HorizontalAlignment="Left" Margin="22,65,0,0" TextWrapping="Wrap" Text="Adess" VerticalAlignment="Top" Height="38" Width="690"/>
+                            <TextBlock x:Name="LabelAddress" HorizontalAlignment="Left" Margin="22,65,0,0" TextWrapping="Wrap" Text="Adrress" VerticalAlignment="Top" Height="38" Width="690"/>
                             <TextBlock x:Name="LabelHours" HorizontalAlignment="Left" Margin="22,109,0,0" TextWrapping="Wrap" Text="Hours" VerticalAlignment="Top" Height="36" Width="675"/>
 
                         </Grid>
