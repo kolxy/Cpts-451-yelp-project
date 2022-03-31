@@ -19,7 +19,7 @@
                     </Grid.ColumnDefinitions>
                 </Grid>
             </TabItem>
-            <TabItem Header="Business Search" Margin="-2,0">
+            <TabItem Header="Business Search" Margin="-2,0,-2,0" Height="20" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5" Margin="-15,-4,1,-5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="22*"/>
@@ -48,7 +48,7 @@
                     </GroupBox>
                     <GroupBox Header="Search Results" HorizontalAlignment="Left" Height="488" Margin="111,10,0,0" VerticalAlignment="Top" Width="856" Grid.Column="2">
                         <Grid HorizontalAlignment="Left" Margin="10,10,-2,-22" Width="836">
-                            <DataGrid x:Name="businessInfoTable" HorizontalAlignment="Left" Height="428" VerticalAlignment="Top" Width="826" SelectionChanged="selectBusiness"/>
+                            <DataGrid x:Name="businessInfoTable" HorizontalAlignment="Left" Height="428" VerticalAlignment="Top" Width="826" SelectionChanged="selectBusiness" IsReadOnly="True"/>
                             <Label Content="# of businesses: " HorizontalAlignment="Left" Margin="565,429,0,0" VerticalAlignment="Top"/>
                             <TextBlock x:Name="busCnt" HorizontalAlignment="Left" Margin="674,434,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="21" Width="80"/>
                         </Grid>
