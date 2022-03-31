@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using YelpQueryEngine;
 using Npgsql;
 
 namespace YelpMain
@@ -34,31 +35,30 @@ namespace YelpMain
 
         private void loadTips()
         {
-            string sqlstr = "SELECT u.name, t.userid, t.tipdate, t.tiptext,t.likes FROM usertable u, tips t WHERE t.businessid = '" + this.bid + "' AND t.userid=u.userid ORDER BY name;";
+            string sqlstr = $"SELECT u.name, t.user_id, t.timestamp, t.text,t.likes FROM the_user u, tips t WHERE t.business_id = '{this.bid}' AND t.user_id=u.user_id ORDER BY name;";
             Console.WriteLine(sqlstr);
-            executeQuery(sqlstr, addGridRow);
-        }
-        public class Tips
-        {
-            public string username { get; set; }
-            public string userid { get; set; }
-            public string tipdate { get; set; }
-            public string tiptext { get; set; }
-            public string likes { get; set; }
+            Utils.executeQuery(sqlstr, addGridRow);
         }
         private void submitButton_Click(object sender, RoutedEventArgs e)
         {
-            //string sqlStrUser = "CREATE OR REPLACE FUNCTION UpdateNumTips() RETURNS trigger AS '" + "Begin update business set numtips = (select count(*) from business b,tips t where b.businessid=t.businessid AND b.businessid=" + this.bid+");" + " retur null;"+" END"+"' LANGUAGE plpgsql;"+" CREATE TRIGGER TriNumTips AFTER INSERT ON Tips FRO EACH STATEMENT EXECUTE PROCEDURE UpdateNumTips();";
-            string sqlStrBussines = "UPDATE business SET numtips = numtips + 1 WHERE businessid='" + this.bid+"';";
-            executeQuery(sqlStrBussines, null);
-            string sqlStrUser = "UPDATE usertable SET tipcount = tipcount + 1 WHERE userid = '" + this.userid + "'; ";
-            this.Close();
+            string sqlstr = $"INSERT INTO tips (business_id, user_id, timestamp, likes, text) values ('{this.bid}', '{this.userid}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', 0, '{textbox.Text}')";
+            Console.WriteLine(sqlstr);
+            textbox.Text = "";
+            Utils.executeQuery(sqlstr, null);
+            textGird.Items.Clear();
+            loadTips();
         }
 
         private void addGridRow(NpgsqlDataReader R)
         {
 
-            textGird.Items.Add(new Tips() { username = R.GetString(0), userid = R.GetString(1), tipdate = R.GetDateTime(2).ToString(), tiptext = R.GetString(3), likes = R.GetInt16(4).ToString() });
+            textGird.Items.Add(new Tips() { 
+                username = R.GetString(0), 
+                user_id = R.GetString(1), 
+                timestamp = R.GetDateTime(2).ToString(), 
+                text = R.GetString(3), 
+                likes = R.GetInt16(4).ToString() 
+            });
         }
 
         private void addColumnsToGrid()
@@ -70,19 +70,19 @@ namespace YelpMain
             textGird.Columns.Add(col1);
 
             DataGridTextColumn col2 = new DataGridTextColumn();
-            col2.Binding = new Binding("userid");
+            col2.Binding = new Binding("user_id");
             col2.Header = "UserID";
             col2.Width = 100;
             textGird.Columns.Add(col2);
 
             DataGridTextColumn col3 = new DataGridTextColumn();
-            col3.Binding = new Binding("tipdate");
+            col3.Binding = new Binding("timestamp");
             col3.Header = "Date";
             col3.Width = 100;
             textGird.Columns.Add(col3);
 
             DataGridTextColumn col4 = new DataGridTextColumn();
-            col4.Binding = new Binding("tiptext");
+            col4.Binding = new Binding("text");
             col4.Header = "Text";
             col4.Width = 100;
             textGird.Columns.Add(col4);
@@ -97,42 +97,6 @@ namespace YelpMain
         private void textbox_TextChanged(object sender, TextChangedEventArgs e)
         {
             this.text = textbox.Text;
-        }
-
-        private string buildConnectionString()
-        {
-            return "Host = localhost; Username = postgres; Database = Milestone2; password=123456";
-        }
-
-        private void executeQuery(string sqlstr, Action<NpgsqlDataReader> myf)
-        {
-            using (var connection = new NpgsqlConnection(buildConnectionString()))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand())
-                {
-                    cmd.Connection = connection;
-                    cmd.CommandText = sqlstr;
-                    try
-                    {
-                        var reader = cmd.ExecuteReader();
-                        if (myf != null)
-                        {
-                            while (reader.Read())
-                                myf(reader);
-                        }
-                        
-                    }
-                    catch (NpgsqlException ex)
-                    {
-                        Console.WriteLine(ex.Message.ToString());
-                    }
-                    finally
-                    {
-                        connection.Close();
-                    }
-                }
-            }
         }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
