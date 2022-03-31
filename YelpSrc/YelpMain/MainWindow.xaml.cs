@@ -138,7 +138,12 @@ namespace YelpMain
             {
                 return;
             }
-            selectedCatList.Items.Add(businessCatList.SelectedItem.ToString());
+            string selectedCat = businessCatList.SelectedItem.ToString();
+            if (!selectedCatList.Items.Contains(selectedCat))
+            {
+                selectedCatList.Items.Add(selectedCat);
+            }
+            Console.WriteLine(selectedCatList.Items.ToString());
         }
 
         /// <summary>
@@ -152,7 +157,7 @@ namespace YelpMain
             {
                 return;
             }
-            selectedCatList.Items.Remove(selectedCatList.SelectedItem.ToString());
+            selectedCatList.Items.RemoveAt(selectedCatList.SelectedIndex);
         }
 
         /// <summary>
@@ -180,7 +185,7 @@ namespace YelpMain
                     cats.Add("'" + item.ToString() + "'");
                 }
                 string string_cats = string.Join(",", cats.ToArray());
-                string sql2 = "(select business_id from business_category where name in (" + string_cats + "))";
+                string sql2 = $"(select business_id from business_category where name in ({string_cats}) GROUP BY business_id HAVING count(1) = {selectedCatList.Items.Count})";
                 sqlstr = sql1 + sql2;
             }
             // search zip, city, state
