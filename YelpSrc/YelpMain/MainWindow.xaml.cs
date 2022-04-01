@@ -237,10 +237,17 @@ namespace YelpMain
 
         public void selectBusiness(object sender, RoutedEventArgs e)
         {
-            Business bus = (Business) businessInfoTable.SelectedItem;
-            LabelName.Text = bus.name;
-            LabelAddress.Text = bus.address;
-            LabelHours.Text = "Not required for Milestone 2 amirite?";
+            if (businessInfoTable.SelectedIndex > -1)
+            {
+                Business bus = (Business)businessInfoTable.SelectedItem;
+                LabelName.Text = bus.name;
+                LabelAddress.Text = bus.address;
+                LabelHours.Text = "Not required for Milestone 2 amirite?";
+            } else
+            {
+                LabelName.Text = "Name";
+                LabelAddress.Text = "Address";
+            }
         }
 
         public void showTip(object sender, RoutedEventArgs e)
