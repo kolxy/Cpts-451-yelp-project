@@ -258,5 +258,31 @@ namespace YelpMain
                 tt.Show();
             }
         }
+
+        public void nameSearchChange(object sender, RoutedEventArgs e)
+        {
+            userList.Items.Clear();
+            if (nameSearch.Text.Trim().Length > 0)
+            {
+                string sql = $"select user_id from the_user where name like '%{ nameSearch.Text }%' ";
+                Utils.executeQuery(sql, addUserToList);
+            }
+        }
+
+        private void addUserToList(NpgsqlDataReader reader)
+        {
+            userList.Items.Add(reader.GetString(0));
+        }
+
+        public void userSelect(object sender, RoutedEventArgs e)
+        {
+            Utils.currentUser = userList.SelectedItem.ToString();
+            string sql = $"select * from the_user where user_id = '{Utils.currentUser}' ";
+        }
+
+        private void displayUserInfo(NpgsqlDataReader reader)
+        {
+
+        }
     }
 }

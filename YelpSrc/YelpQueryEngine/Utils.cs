@@ -5,6 +5,7 @@ namespace YelpQueryEngine
 {
     public class Utils
     {
+        public static String currentUser = "";
         public static string buildConnectionStr()
         {
             return "Host = localhost; Username = postgres; Database = yelp; password=admin";
