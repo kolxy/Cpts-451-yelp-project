@@ -284,5 +284,37 @@ namespace YelpMain
         {
 
         }
+
+        /// <summary>
+        /// Select business event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void selectBusiness(object sender, SelectionChangedEventArgs e)
+        {
+            this.infoList.Items.Clear();
+            if (this.businessInfoTable.SelectedIndex < 0)
+            {
+                return;
+            }
+            Business bus = (Business)businessInfoTable.SelectedItem;
+            string businessId = bus.business_id;
+            infoList.Items.Add("\u2022 Category");
+            string sqlstr = "select name from business_category where business_id = '" + businessId + "'";
+            Utils.executeQuery(sqlstr, addInfoListCat);
+            infoList.Items.Add("\u2022 Attributes");
+            string sqlstr1 = $"select name from business_attribute where business_id = '{businessId}' and value = 'True'";
+            Utils.executeQuery(sqlstr1, addInfoListAtt);
+        }
+
+        private void addInfoListCat(NpgsqlDataReader reader)
+        {
+            infoList.Items.Add("\t" + reader.GetString(0));
+        }
+
+        private void addInfoListAtt(NpgsqlDataReader reader)
+        {
+            infoList.Items.Add("\t" + reader.GetString(0));
+        }
     }
 }

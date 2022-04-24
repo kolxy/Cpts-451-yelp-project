@@ -8,7 +8,7 @@ namespace YelpQueryEngine
         public static String currentUser = "";
         public static string buildConnectionStr()
         {
-            return "Host = localhost; Username = postgres; Database = yelp; password=admin";
+            return "Host = localhost; Username = postgres; Database = yelp451; password=123456";
         }
 
         /// <summary>
