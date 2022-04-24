@@ -81,7 +81,7 @@ SELECT business_id, name, city, num_tips, num_checkings
 FROM business 
 WHERE business_id ='K8M3OeFCcAnxuxtTc0BQrQ';
 
-SELECT user_id, name, tip_count, likes
+SELECT user_id, name, tip_count, total_likes
 FROM the_user
 WHERE user_id = 'NxtYkOpXHSy7LWRKJf3z0w';
 
