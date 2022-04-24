@@ -30,7 +30,53 @@
                             <ListBox x:Name="userList" Grid.ColumnSpan="3" Height="235" VerticalAlignment="Bottom" SelectionChanged="userSelect"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox_Copy" Header="User Information" Margin="3,0,944,520" Grid.Column="6"/>
+                    <GroupBox x:Name="groupBox_Copy" Header="User Information" Margin="3,0,944,520" Grid.Column="6">
+                        <Grid>
+                            <Label Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <TextBox x:Name="user_name" Height="22" Margin="43,4,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                            <Label Content="Stars:" HorizontalAlignment="Left" Margin="0,26,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.079,0.5"/>
+                            <TextBox x:Name="user_stars" HorizontalAlignment="Left" Height="22" Margin="43,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="58"/>
+                            <Label Content="Fans:" HorizontalAlignment="Left" Margin="125,26,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.105,0.115"/>
+                            <TextBox x:Name="user_fans" HorizontalAlignment="Left" Height="21" Margin="161,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="69"/>
+                            <Label Content="Yelping Since:" HorizontalAlignment="Left" Margin="0,52,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="user_since" HorizontalAlignment="Left" Height="22" Margin="87,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="143"/>
+                            <Label Content="Votes" HorizontalAlignment="Left" Margin="0,78,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.718,-0.038"/>
+                            <Label Content="funny:" HorizontalAlignment="Left" Margin="62,78,0,0" VerticalAlignment="Top"/>
+                            <Label Content="cool:" HorizontalAlignment="Left" Margin="125,78,0,0" VerticalAlignment="Top"/>
+                            <Label Content="useful:" HorizontalAlignment="Left" Margin="187,78,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.273,0.538"/>
+                            <TextBox x:Name="vote_funny" HorizontalAlignment="Left" Height="21" Margin="62,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="43"/>
+                            <TextBox x:Name="vote_cool" HorizontalAlignment="Left" Height="21" Margin="125,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="43"/>
+                            <TextBox x:Name="vote_useful" HorizontalAlignment="Left" Height="21" Margin="187,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="43" RenderTransformOrigin="1.488,0.476"/>
+                            <Label Content="Tip Count:" HorizontalAlignment="Left" Margin="0,125,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="user_tipcounts" HorizontalAlignment="Left" Height="22" Margin="92,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="58" RenderTransformOrigin="0.448,0.409"/>
+                            <Label Content="Total Tip Likes:" HorizontalAlignment="Left" Margin="0,151,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="user_tiplikes" HorizontalAlignment="Left" Height="22" Margin="92,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="58"/>
+                            <Label Content="Location:" HorizontalAlignment="Left" Margin="0,177,0,0" VerticalAlignment="Top"/>
+                            <Label Content="lat:" HorizontalAlignment="Left" Margin="15,199,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="user_lat" HorizontalAlignment="Left" Height="22" Margin="63,203,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105"/>
+                            <Label Content="long:" HorizontalAlignment="Left" Margin="15,230,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="user_long" HorizontalAlignment="Left" Height="22" Margin="62,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" RenderTransformOrigin="0.448,1.773"/>
+                            <Button Content="Edit" HorizontalAlignment="Left" Margin="173,203,0,0" VerticalAlignment="Top" Width="57" Height="22"/>
+                            <Button Content="Update" HorizontalAlignment="Left" Margin="173,230,0,0" VerticalAlignment="Top" Width="57" Height="22"/>
+
+
+
+                        </Grid>
+
+                    </GroupBox>
+                    <GroupBox Header="Friends" HorizontalAlignment="Left" Height="505" Margin="0,287,0,0" VerticalAlignment="Top" Width="441" Grid.ColumnSpan="7">
+                        <Grid>
+                            <DataGrid x:Name="userfriendstable" HorizontalAlignment="Left" Height="462" Margin="10,10,0,0" VerticalAlignment="Top" Width="409"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Column="6" Header="Latest Tips of My Friends" HorizontalAlignment="Left" Height="782" Margin="260,10,0,0" VerticalAlignment="Top" Width="929">
+                        <Grid>
+                            <DataGrid x:Name="friendslatesttipstable" HorizontalAlignment="Left" Height="739" Margin="10,10,0,0" VerticalAlignment="Top" Width="907"/>
+
+                        </Grid>
+                    </GroupBox>
+
+
                 </Grid>
             </TabItem>
             <TabItem Header="Business Search" Margin="-2,0,-2,0" Height="20" VerticalAlignment="Top">

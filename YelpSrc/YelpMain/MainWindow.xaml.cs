@@ -27,6 +27,7 @@ namespace YelpMain
             InitializeComponent();
             initState();
             initBusinessInfoTableHeader();
+            addColumns2Grid();
         }
 
         /// <summary>
@@ -285,6 +286,7 @@ namespace YelpMain
 
         }
 
+
         /// <summary>
         /// Select business event.
         /// </summary>
@@ -315,6 +317,58 @@ namespace YelpMain
         private void addInfoListAtt(NpgsqlDataReader reader)
         {
             infoList.Items.Add("\t" + reader.GetString(0));
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void addColumns2Grid()
+        {
+            DataGridTextColumn col1 = new DataGridTextColumn();
+            col1.Header = "Name";
+            col1.Width = 100;
+            userfriendstable.Columns.Add(col1);
+
+            DataGridTextColumn col2 = new DataGridTextColumn();
+            col2.Header = "Total Likes";
+            col2.Width = 60;
+            userfriendstable.Columns.Add(col2);
+
+            DataGridTextColumn col3 = new DataGridTextColumn();
+            col3.Header = "Avg Stars";
+            col3.Width = 60;
+            userfriendstable.Columns.Add(col3);
+
+            DataGridTextColumn col4 = new DataGridTextColumn();
+            col4.Header = "Yelp Since";
+            col4.Width = 200;
+            userfriendstable.Columns.Add(col4);
+
+            DataGridTextColumn col5 = new DataGridTextColumn();
+            col5.Header = "Username";
+            col5.Width = 100;
+            friendslatesttipstable.Columns.Add(col5);
+
+            DataGridTextColumn col6 = new DataGridTextColumn();
+            col6.Header = "Business";
+            col6.Width = 100;
+            friendslatesttipstable.Columns.Add(col6);
+
+            DataGridTextColumn col7 = new DataGridTextColumn();
+            col7.Header = "City";
+            col7.Width = 100;
+            friendslatesttipstable.Columns.Add(col7);
+
+            DataGridTextColumn col8 = new DataGridTextColumn();
+            col8.Header = "Text";
+            col8.Width = 460;
+            friendslatesttipstable.Columns.Add(col8);
+
+            DataGridTextColumn col9 = new DataGridTextColumn();
+            col9.Header = "Date";
+            col9.Width = 150;
+            friendslatesttipstable.Columns.Add(col9);
         }
     }
 }
