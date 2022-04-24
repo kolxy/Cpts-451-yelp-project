@@ -8,6 +8,7 @@ namespace YelpQueryEngine
 {
     public class Constants
     {
+        // ---------------------------------------------------------------------- Search Business UI setting ---------------------------------------------//
         public static Dictionary<string, string> getBusinessInfoTableHeaderNameAndBinder()
         {
             Dictionary<string, string> colNameBinding = new Dictionary<string, string>();
@@ -39,6 +40,40 @@ namespace YelpQueryEngine
             return colNameWidth;
         }
 
+        // ---------------------------------------------------------------------- User portal UI setting ---------------------------------------------//
+        public static Dictionary<string, string> getUserFriendTableBinder()
+        {
+            Dictionary<string, string> colNameBinding = new Dictionary<string, string>();
+            colNameBinding.Add("Name", "name");
+            colNameBinding.Add("TotalLikes", "total_likes");
+            colNameBinding.Add("Avg Stars", "average_stars");
+            colNameBinding.Add("Yelping Since", "yelp_since");
+            return colNameBinding;
+        }
+
+        // total width: "409"
+        public static Dictionary<string, int> getUserFriendTableHeaderColWidth()
+        {
+            Dictionary<string, int> colNameWidth = new Dictionary<string, int>();
+            colNameWidth.Add("Name", 79);
+            colNameWidth.Add("TotalLikes", 75);
+            colNameWidth.Add("Avg Stars", 75);
+            colNameWidth.Add("Yelping Since", 180);
+            return colNameWidth;
+        }
+
+        //friendslatesttipstable
+        // total width: 907
+        public static Dictionary<string, int> getFriendsLatestTipTableColWidth()
+        {
+            Dictionary<string, int> colNameWidth = new Dictionary<string, int>();
+            colNameWidth.Add("User Name", 107);
+            colNameWidth.Add("Business", 150);
+            colNameWidth.Add("City", 100);
+            colNameWidth.Add("Text", 300);
+            colNameWidth.Add("Date", 250);
+            return colNameWidth;
+        }
 
     }
 }

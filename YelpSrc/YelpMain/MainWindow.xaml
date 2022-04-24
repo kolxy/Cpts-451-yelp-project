@@ -19,7 +19,7 @@
                         <ColumnDefinition Width="13*"/>
                         <ColumnDefinition Width="1199*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox x:Name="groupBox" Header="Set Current User" Grid.ColumnSpan="6" Margin="0,0,2,520">
+                    <GroupBox x:Name="groupBox" Header="Set Current User" Grid.ColumnSpan="6" Margin="0,5,2,515">
                         <Grid Margin="0,10,0,1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="51*"/>
@@ -30,7 +30,7 @@
                             <ListBox x:Name="userList" Grid.ColumnSpan="3" Height="235" VerticalAlignment="Bottom" SelectionChanged="userSelect"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox_Copy" Header="User Information" Margin="3,0,944,520" Grid.Column="6">
+                    <GroupBox x:Name="groupBox_Copy" Header="User Information" Margin="3,10,944,510" Grid.Column="6">
                         <Grid>
                             <Label Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                             <TextBox x:Name="user_name" Height="22" Margin="43,4,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>

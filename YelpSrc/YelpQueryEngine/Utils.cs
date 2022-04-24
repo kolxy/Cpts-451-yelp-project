@@ -5,7 +5,9 @@ namespace YelpQueryEngine
 {
     public class Utils
     {
-        public static String currentUser = "";
+        public static String currentUser = "FgQCX3ztjhellw2hyRedxg";
+        public static Business currentBus;
+
         public static string buildConnectionStr()
         {
 
