@@ -27,7 +27,9 @@ namespace YelpMain
             InitializeComponent();
             initState();
             initBusinessInfoTableHeader();
-            addColumns2Grid();
+            initUserFriendTableHeader();
+            initFriendsLatestTipTableHeader();
+            initUserId();
         }
 
         /// <summary>
@@ -43,6 +45,19 @@ namespace YelpMain
         {
             stateList.Items.Add(reader.GetString(0));
         }
+
+
+        private void initUserId()
+        {
+            string sqlstr = "select distinct user_id from the_user";
+            Utils.executeQuery(sqlstr, addUserId);
+        }
+
+        private void addUserId(NpgsqlDataReader reader)
+        {
+            userList.Items.Add(reader.GetString(0));
+        }
+
 
         /// <summary>
         /// Init the header row for [businessInfoTable]
@@ -60,6 +75,38 @@ namespace YelpMain
                 businessInfoTable.Columns.Add(col);
             }
         }
+
+        // userfriendstable header setup and binding with object.
+        private void initUserFriendTableHeader()
+        {
+
+            Dictionary<string, string> colNameBinding = Constants.getUserFriendTableBinder();
+            Dictionary<string, int> colNameWidth = Constants.getUserFriendTableHeaderColWidth();
+            foreach (var item in colNameBinding)
+            {
+                DataGridTextColumn col = new DataGridTextColumn();
+                col.Header = item.Key;
+                col.Binding = new Binding(item.Value);
+                col.Width = colNameWidth[item.Key];
+                userfriendstable.Columns.Add(col);
+            }
+
+        }
+
+        private void initFriendsLatestTipTableHeader()
+        {
+            Dictionary<string, int> colNameWidth = Constants.getFriendsLatestTipTableColWidth();
+            foreach (var item in colNameWidth)
+            {
+                DataGridTextColumn col = new DataGridTextColumn();
+                col.Header = item.Key;
+                col.Width = colNameWidth[item.Key];
+                friendslatesttipstable.Columns.Add(col);
+            }
+        }
+
+
+
 
         /// <summary>
         /// State selection change event.
@@ -215,6 +262,21 @@ namespace YelpMain
 
             Utils.executeQuery(sqlstr, showResult);
             busCnt.Text = businessInfoTable.Items.Count.ToString();
+            
+        }
+
+        private void updateDistance()
+        {
+            string businessID = Utils.currentBus.business_id;
+            string userID = Utils.currentUser;
+            string sql = $"select getdistance(business.latitude, business.longitude, the_user.latitude, the_user.longtiude) from business full outer join the_user" +
+                $" on 1 = 1 where business_id = '{businessID}' and user_id = '{userID}'";
+            Utils.executeQuery(sql, distanceUIupdate);
+        }
+
+        private void distanceUIupdate(NpgsqlDataReader reader)
+        {
+            Utils.currentBus.distance = reader.GetDouble(0);
         }
 
         private void showResult(NpgsqlDataReader reader)
@@ -232,6 +294,11 @@ namespace YelpMain
             bus.num_checkings = reader.GetInt64(9);
             bus.num_tips = reader.GetInt64(10);
             bus.is_open = reader.GetBoolean(11);
+            
+            /*
+            Utils.currentBus = bus;
+            updateDistance();
+            */
             businessInfoTable.Items.Add(bus);
 
         }
@@ -317,58 +384,32 @@ namespace YelpMain
         private void addInfoListAtt(NpgsqlDataReader reader)
         {
             infoList.Items.Add("\t" + reader.GetString(0));
+        }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
         }
 
-        private void addColumns2Grid()
+        /// <summary>
+        /// User id selection event, should display user info.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void userSelect(object sender, SelectionChangedEventArgs e)
         {
-            DataGridTextColumn col1 = new DataGridTextColumn();
-            col1.Header = "Name";
-            col1.Width = 100;
-            userfriendstable.Columns.Add(col1);
-
-            DataGridTextColumn col2 = new DataGridTextColumn();
-            col2.Header = "Total Likes";
-            col2.Width = 60;
-            userfriendstable.Columns.Add(col2);
-
-            DataGridTextColumn col3 = new DataGridTextColumn();
-            col3.Header = "Avg Stars";
-            col3.Width = 60;
-            userfriendstable.Columns.Add(col3);
-
-            DataGridTextColumn col4 = new DataGridTextColumn();
-            col4.Header = "Yelp Since";
-            col4.Width = 200;
-            userfriendstable.Columns.Add(col4);
-
-            DataGridTextColumn col5 = new DataGridTextColumn();
-            col5.Header = "Username";
-            col5.Width = 100;
-            friendslatesttipstable.Columns.Add(col5);
-
-            DataGridTextColumn col6 = new DataGridTextColumn();
-            col6.Header = "Business";
-            col6.Width = 100;
-            friendslatesttipstable.Columns.Add(col6);
-
-            DataGridTextColumn col7 = new DataGridTextColumn();
-            col7.Header = "City";
-            col7.Width = 100;
-            friendslatesttipstable.Columns.Add(col7);
-
-            DataGridTextColumn col8 = new DataGridTextColumn();
-            col8.Header = "Text";
-            col8.Width = 460;
-            friendslatesttipstable.Columns.Add(col8);
-
-            DataGridTextColumn col9 = new DataGridTextColumn();
-            col9.Header = "Date";
-            col9.Width = 150;
-            friendslatesttipstable.Columns.Add(col9);
+            if (this.userList.SelectedIndex < 0)
+            {
+                return;
+            }
+            string userId = (string)userList.SelectedItem;
+            string sqlstr = $"select name, average_stars, fans, yelp_since, funny, cool, useful, tip_count, total_likes, latitude, longtiude from the_user where user_id = '{userId}'";
+            Utils.executeQuery(sqlstr, addUserInfo);
+        }
+        
+        private void addUserInfo(NpgsqlDataReader reader)
+        {
+            this.user_name.Text = reader.GetString(0);
         }
     }
 }

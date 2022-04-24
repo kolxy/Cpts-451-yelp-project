@@ -20,5 +20,6 @@ namespace YelpQueryEngine
         public Int64 num_checkings { get; set; }
         public Int64 num_tips { get; set; }
         public bool is_open { get; set; }
+        public double distance { get; set; }
     }
 }
