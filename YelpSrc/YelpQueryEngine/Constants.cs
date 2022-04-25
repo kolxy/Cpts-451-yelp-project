@@ -63,6 +63,17 @@ namespace YelpQueryEngine
             return colNameWidth;
         }
 
+        public static Dictionary<string, string> getFriendsLatestTipTableBinder()
+        {
+            Dictionary<string, string> colNameBinding = new Dictionary<string, string>();
+            colNameBinding.Add("User Name", "user_name");
+            colNameBinding.Add("Business", "business_name");
+            colNameBinding.Add("City", "city");
+            colNameBinding.Add("Text", "text");
+            colNameBinding.Add("Date", "date");
+            return colNameBinding;
+        }
+
         //friendslatesttipstable
         // total width: 907
         public static Dictionary<string, int> getFriendsLatestTipTableColWidth()

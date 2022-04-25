@@ -135,11 +135,13 @@ namespace YelpMain
 
         private void initFriendsLatestTipTableHeader()
         {
+            Dictionary<string, string> colNameBinding = Constants.getFriendsLatestTipTableBinder();
             Dictionary<string, int> colNameWidth = Constants.getFriendsLatestTipTableColWidth();
-            foreach (var item in colNameWidth)
+            foreach (var item in colNameBinding)
             {
                 DataGridTextColumn col = new DataGridTextColumn();
                 col.Header = item.Key;
+                col.Binding = new Binding(item.Value);
                 col.Width = colNameWidth[item.Key];
                 friendslatesttipstable.Columns.Add(col);
             }
@@ -378,11 +380,11 @@ namespace YelpMain
             userList.Items.Add(reader.GetString(0));
         }
 
+
         private void displayUserInfo(NpgsqlDataReader reader)
         {
 
         }
-
 
         /// <summary>
         /// Select business event.
@@ -435,21 +437,77 @@ namespace YelpMain
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void userSelect(object sender, SelectionChangedEventArgs e)
+        public void userSelect(object sender, RoutedEventArgs e)
         {
-            if (this.userList.SelectedIndex < 0)
+            if (userList.SelectedIndex >= 0)
             {
-                return;
+                userfriendstable.Items.Clear();
+                friendslatesttipstable.Items.Clear();
+                Utils.currentUser = userList.SelectedItem.ToString();
+                string sql = $"select * from the_user where user_id = '{Utils.currentUser}' ";
+                Utils.executeQuery(sql, displayUserInfo);
+                sql = $"select name, total_likes, average_stars, yelp_since from user_follow, the_user where user_follow.friend_id = the_user.user_id and user_follow.user_id = '{Utils.currentUser}' ";
+                Utils.executeQuery(sql, addFriendToList);
+                sql = $"select u.name as user_name, b.name as business_name, b.city, t.text, t.timestamp from user_follow as f, the_user as u, tips as t, business as b where f.friend_id = u.user_id and t.user_id = u.user_id and b.business_id = t.business_id and f.user_id = '{Utils.currentUser}' order by t.timestamp desc ";
+                Utils.executeQuery(sql, addLatestTipToList);
             }
-            string userId = (string)userList.SelectedItem;
-            string sqlstr = $"select name, average_stars, fans, yelp_since, funny, cool, useful, tip_count, total_likes, latitude, longtiude from the_user where user_id = '{userId}'";
-            Utils.executeQuery(sqlstr, addUserInfo);
-        }
-        
-        private void addUserInfo(NpgsqlDataReader reader)
-        {
-            this.user_name.Text = reader.GetString(0);
         }
 
+        private void displayUserInfo(NpgsqlDataReader reader)
+        {
+            user_name.Text = reader.GetString(reader.GetOrdinal("name"));
+            user_stars.Text = reader.GetDouble(reader.GetOrdinal("average_stars")).ToString();
+            user_fans.Text = reader.GetDouble(reader.GetOrdinal("fans")).ToString();
+            user_since.Text = reader.GetTimeStamp(reader.GetOrdinal("yelp_since")).ToString();
+            vote_funny.Text = reader.GetInt16(reader.GetOrdinal("funny")).ToString();
+            vote_cool.Text = reader.GetInt16(reader.GetOrdinal("cool")).ToString();
+            vote_useful.Text = reader.GetInt16(reader.GetOrdinal("useful")).ToString();
+            user_tipcounts.Text = reader.GetInt16(reader.GetOrdinal("tip_count")).ToString();
+            user_tiplikes.Text = reader.GetInt16(reader.GetOrdinal("total_likes")).ToString();
+            user_lat.Text = reader.GetDouble(reader.GetOrdinal("latitude")).ToString();
+            user_long.Text = reader.GetDouble(reader.GetOrdinal("longtiude")).ToString();
+        }
+
+        private void addFriendToList(NpgsqlDataReader reader)
+        {
+            userfriendstable.Items.Add(new
+            {
+                name = reader.GetString(reader.GetOrdinal("name")),
+                total_likes = reader.GetInt32(reader.GetOrdinal("total_likes")).ToString(),
+                average_stars = reader.GetDouble(reader.GetOrdinal("average_stars")).ToString(),
+                yelp_since = reader.GetTimeStamp(reader.GetOrdinal("yelp_since")).ToString()
+            });
+        }
+
+        private void addLatestTipToList(NpgsqlDataReader reader)
+        {
+            friendslatesttipstable.Items.Add(new
+            {
+                user_name = reader.GetString(reader.GetOrdinal("user_name")),
+                business_name = reader.GetString(reader.GetOrdinal("business_name")),
+                city = reader.GetString(reader.GetOrdinal("city")),
+                text = reader.GetString(reader.GetOrdinal("text")),
+                date = reader.GetTimeStamp(reader.GetOrdinal("timestamp")).ToString(),
+            });
+        }
+
+        public void editClick(object sender, RoutedEventArgs e)
+        {
+            user_lat.IsReadOnly = false;
+            user_long.IsReadOnly = false;
+        }
+
+        public void coordUpdate(object sender, RoutedEventArgs e)
+        {
+            user_lat.IsReadOnly = true;
+            user_long.IsReadOnly = true;
+            string sql = $"UPDATE the_user set latitude = '{user_lat.Text}', longtiude = '{user_long.Text}' where user_id = '{Utils.currentUser}'";
+            Utils.executeQuery(sql, doNothing);
+        }
+
+        public void doNothing(NpgsqlDataReader reader)
+        {
+            Console.WriteLine("I love database");
+        }
     }
 }
