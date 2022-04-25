@@ -380,12 +380,6 @@ namespace YelpMain
             userList.Items.Add(reader.GetString(0));
         }
 
-
-        private void displayUserInfo(NpgsqlDataReader reader)
-        {
-
-        }
-
         /// <summary>
         /// Select business event.
         /// </summary>
@@ -427,10 +421,6 @@ namespace YelpMain
             LabelHours.Text = (reader.GetString(0) + ":         Opens: " + reader.GetTimeSpan(1).ToString() + "         Closes: " + reader.GetTimeSpan(2).ToString()).ToString();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
 
         /// <summary>
         /// User id selection event, should display user info.
@@ -495,12 +485,16 @@ namespace YelpMain
         {
             user_lat.IsReadOnly = false;
             user_long.IsReadOnly = false;
+            user_lat.Background = Brushes.White;
+            user_long.Background = Brushes.White;
         }
 
         public void coordUpdate(object sender, RoutedEventArgs e)
         {
             user_lat.IsReadOnly = true;
             user_long.IsReadOnly = true;
+            user_lat.Background = Brushes.LightGray;
+            user_long.Background = Brushes.LightGray;
             string sql = $"UPDATE the_user set latitude = '{user_lat.Text}', longtiude = '{user_long.Text}' where user_id = '{Utils.currentUser}'";
             Utils.executeQuery(sql, doNothing);
         }
