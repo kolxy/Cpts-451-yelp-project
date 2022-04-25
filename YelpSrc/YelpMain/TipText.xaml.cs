@@ -22,7 +22,6 @@ namespace YelpMain
     public partial class TipText : Window
     {
         private string bid = "";
-        private string userid = "---1lKK3aKOuomHnwAkAow";
         private string text;
 
         public TipText(string bid)
@@ -41,7 +40,12 @@ namespace YelpMain
         }
         private void submitButton_Click(object sender, RoutedEventArgs e)
         {
-            string sqlstr = $"INSERT INTO tips (business_id, user_id, timestamp, likes, text) values ('{this.bid}', '{this.userid}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', 0, '{textbox.Text}')";
+            if (Utils.currentUser.Length <= 0)
+            {
+                MessageBox.Show("In order to add tip pls first login!");
+                return;
+            }
+            string sqlstr = $"INSERT INTO tips (business_id, user_id, timestamp, likes, text) values ('{this.bid}', '{Utils.currentUser}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', 0, '{textbox.Text}')";
             Console.WriteLine(sqlstr);
             textbox.Text = "";
             Utils.executeQuery(sqlstr, null);
@@ -101,6 +105,16 @@ namespace YelpMain
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
+        }
+
+        private void likeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Utils.currentUser.Length <= 0)
+            {
+                MessageBox.Show("In order to like a tip pls first login!");
+                return;
+            }
 
         }
     }
