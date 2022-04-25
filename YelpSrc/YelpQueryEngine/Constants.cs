@@ -8,6 +8,7 @@ namespace YelpQueryEngine
 {
     public class Constants
     {
+ 
         // ---------------------------------------------------------------------- Search Business UI setting ---------------------------------------------//
         public static Dictionary<string, string> getBusinessInfoTableHeaderNameAndBinder()
         {

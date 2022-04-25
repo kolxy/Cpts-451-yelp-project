@@ -22,6 +22,10 @@ namespace YelpMain
     /// </summary>
     public partial class MainWindow : Window
     {
+        Dictionary<string, bool> attFilter;
+        Dictionary<string, bool> mealFilter;
+        Dictionary<string, bool> priceFilter; 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,6 +34,42 @@ namespace YelpMain
             initUserFriendTableHeader();
             initFriendsLatestTipTableHeader();
             initUserId();
+            attFilter = new Dictionary<string, bool>();
+            mealFilter = new Dictionary<string, bool>();
+            priceFilter = new Dictionary<string, bool>();
+            initFilter();
+            initSortBar();
+        }
+
+        private void initSortBar()
+        {
+            sortList.Items.Add("Name (default)");
+            sortList.Items.Add("Highest rated");
+            sortList.Items.Add("Most number of tips");
+            sortList.Items.Add("Most checkings");
+            sortList.Items.Add("Nearest");
+            sortList.SelectedIndex = 0;
+        }
+
+        private void initFilter()
+        {
+            List<string> attList = new List<string> { "BusinessAcceptsCreditCards" , "RestaurantsReservations", "WheelchairAccessible",
+            "OutdoorSeating", "RestaurantsGoodForGroups", "RestaurantsDelivery", "RestaurantsTakeOut", "WiFi", "BikeParking"};
+            foreach (string att in attList)
+            {
+                this.attFilter.Add(att, false);
+            }
+            List<string> mealList = new List<string> { "breakfast", "brunch", "lunch", "dinner", "desert", "latenight" };
+            foreach (string meal in mealList)
+            {
+                this.mealFilter.Add(meal, false);
+            }
+
+            List<string> priceList = new List<string> { "RestaurantsPriceRange1", "RestaurantsPriceRange2", "RestaurantsPriceRange3", "RestaurantsPriceRange4" };
+            foreach (string price in priceList)
+            {
+                this.priceFilter.Add(price, false);
+            }
         }
 
         /// <summary>
@@ -305,21 +345,6 @@ namespace YelpMain
 
         }
 
-        public void selectBusiness(object sender, RoutedEventArgs e)
-        {
-            if (businessInfoTable.SelectedIndex > -1)
-            {
-                Business bus = (Business)businessInfoTable.SelectedItem;
-                LabelName.Text = bus.name;
-                LabelAddress.Text = bus.address;
-                LabelHours.Text = "Not required for Milestone 2 amirite?";
-            } else
-            {
-                LabelName.Text = "Name";
-                LabelAddress.Text = "Address";
-            }
-        }
-
         public void showTip(object sender, RoutedEventArgs e)
         {
             if (businessInfoTable.SelectedIndex != -1)
@@ -327,6 +352,17 @@ namespace YelpMain
                 TipText tt = new TipText(((Business)businessInfoTable.SelectedItem).business_id);
                 tt.Show();
             }
+        }
+        private void checkInBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (businessInfoTable.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            CheckinWindow ckWin = new CheckinWindow(((Business)businessInfoTable.SelectedItem).business_id);
+            ckWin.Show();
+
         }
 
         public void nameSearchChange(object sender, RoutedEventArgs e)
@@ -344,6 +380,12 @@ namespace YelpMain
             userList.Items.Add(reader.GetString(0));
         }
 
+
+        private void displayUserInfo(NpgsqlDataReader reader)
+        {
+
+        }
+
         /// <summary>
         /// Select business event.
         /// </summary>
@@ -357,13 +399,17 @@ namespace YelpMain
                 return;
             }
             Business bus = (Business)businessInfoTable.SelectedItem;
+            LabelName.Text = bus.name;
+            LabelAddress.Text = bus.address;
             string businessId = bus.business_id;
             infoList.Items.Add("\u2022 Category");
             string sqlstr = "select name from business_category where business_id = '" + businessId + "'";
             Utils.executeQuery(sqlstr, addInfoListCat);
             infoList.Items.Add("\u2022 Attributes");
-            string sqlstr1 = $"select name from business_attribute where business_id = '{businessId}' and value = 'True'";
+            string sqlstr1 = $"select name, value from business_attribute where business_id = '{businessId}' ";
             Utils.executeQuery(sqlstr1, addInfoListAtt);
+            string sqlstr3 = $"select day, open, close from business_hour where business_id = '{businessId}'";
+            Utils.executeQuery(sqlstr3, addHour);
         }
 
         private void addInfoListCat(NpgsqlDataReader reader)
@@ -373,7 +419,12 @@ namespace YelpMain
 
         private void addInfoListAtt(NpgsqlDataReader reader)
         {
-            infoList.Items.Add("\t" + reader.GetString(0));
+            infoList.Items.Add("\t" + reader.GetString(0) + ": " + reader.GetString(1));
+        }
+
+        private void addHour(NpgsqlDataReader reader)
+        {
+            LabelHours.Text = (reader.GetString(0) + ":         Opens: " + reader.GetTimeSpan(1).ToString() + "         Closes: " + reader.GetTimeSpan(2).ToString()).ToString();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -458,7 +509,5 @@ namespace YelpMain
         {
             Console.WriteLine("I love database");
         }
-
-        
     }
 }

@@ -116,9 +116,9 @@
                     </GroupBox>
                     <GroupBox Header="Selected Business" HorizontalAlignment="Left" Height="270" Margin="111,503,0,0" VerticalAlignment="Top" Width="856" Grid.Column="3">
                         <Grid HorizontalAlignment="Left" Height="244" Margin="0,0,-2,0" VerticalAlignment="Top" Width="846">
-                            <Button Content="Show Checkins" HorizontalAlignment="Left" Margin="728,23,0,0" VerticalAlignment="Top" Width="108" Height="65"/>
+                            <Button x:Name="checkInBtn" Content="Show Checkins" HorizontalAlignment="Left" Margin="728,23,0,0" VerticalAlignment="Top" Width="108" Height="65" Click="checkInBtn_Click"/>
                             <Button Content="Show Tips" HorizontalAlignment="Left" Margin="728,109,0,0" VerticalAlignment="Top" Width="108" Height="65" Click="showTip"/>
-                            <TextBlock x:Name="LabelName" HorizontalAlignment="Left" Margin="22,23,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Height="37" Width="675"/>
+                            <TextBlock x:Name="LabelName" HorizontalAlignment="Left" Margin="22,23,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Height="37" Width="675" FontWeight="Bold"/>
                             <TextBlock x:Name="LabelAddress" HorizontalAlignment="Left" Margin="22,65,0,0" TextWrapping="Wrap" Text="Adrress" VerticalAlignment="Top" Height="38" Width="690"/>
                             <TextBlock x:Name="LabelHours" HorizontalAlignment="Left" Margin="22,109,0,0" TextWrapping="Wrap" Text="Hours" VerticalAlignment="Top" Height="36" Width="675"/>
 
@@ -158,7 +158,7 @@
                     </GroupBox>
                     <GroupBox Grid.Column="3" Header="Sort Result By" HorizontalAlignment="Left" Height="106" Margin="972,392,0,0" VerticalAlignment="Top" Width="280">
                         <Grid HorizontalAlignment="Left" Margin="0,0,-2,2" Width="270">
-                            <ComboBox HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Width="241" Height="25"/>
+                            <ComboBox x:Name="sortList" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Width="241" Height="25"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Grid.Column="3" Header="Info" HorizontalAlignment="Left" Height="270" Margin="972,503,0,0" VerticalAlignment="Top" Width="280">
