@@ -231,15 +231,20 @@ namespace YelpMain
         private void searchBusBtn_Click(object sender, RoutedEventArgs e)
         {
             businessInfoTable.Items.Clear();
-            markAttributes();
+            if (Utils.currentUser.Length <= 0)
+            {
+                MessageBox.Show("Please log in first!");
+                return;
+            }
 
+            markAttributes();
             string sql = $@"
                 SELECT
                     business.*,
 	                getdistance ( latitude, longitude, lat2, long2 ) AS distance
                 FROM
 	                business
-	                FULL OUTER JOIN ( SELECT latitude AS lat2, longtiude AS long2 FROM the_user WHERE user_id = 'FgQCX3ztjhellw2hyRedxg' ) AS res ON 1 = 1
+	                FULL OUTER JOIN ( SELECT latitude AS lat2, longtiude AS long2 FROM the_user WHERE user_id = '{Utils.currentUser}' ) AS res ON 1 = 1
                 WHERE
 	                1 = 1 "; // 1=1 for placeholder
 
@@ -320,20 +325,6 @@ namespace YelpMain
             if ((bool)(this.latenight.IsChecked)) { selectedAttr.Add("'latenight'"); }
         }
 
-        private void updateDistance()
-        {
-            string businessID = Utils.currentBus.business_id;
-            string userID = Utils.currentUser;
-            string sql = $"select getdistance(business.latitude, business.longitude, the_user.latitude, the_user.longtiude) from business full outer join the_user" +
-                $" on 1 = 1 where business_id = '{businessID}' and user_id = '{userID}'";
-            Utils.executeQuery(sql, distanceUIupdate);
-        }
-
-        private void distanceUIupdate(NpgsqlDataReader reader)
-        {
-            Utils.currentBus.distance = reader.GetDouble(0);
-        }
-
         private void showResult(NpgsqlDataReader reader)
         {
             Business bus = new Business();
@@ -350,10 +341,6 @@ namespace YelpMain
             bus.num_tips = reader.GetInt64(10);
             bus.is_open = reader.GetBoolean(11);
             bus.distance = reader.GetDouble(12);
-            /*
-            Utils.currentBus = bus;
-            updateDistance();
-            */
             businessInfoTable.Items.Add(bus);
 
         }

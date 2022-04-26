@@ -36,6 +36,7 @@ namespace YelpMain
 
         private void loadTips()
         {
+            this.textGird.Items.Clear();
             string sqlstr = $"SELECT u.name, t.user_id, t.timestamp, t.text,t.likes FROM the_user u, tips t WHERE t.business_id = '{this.bid}' AND t.user_id=u.user_id ORDER BY name;";
             Console.WriteLine(sqlstr);
             Utils.executeQuery(sqlstr, addGridRow);
@@ -163,9 +164,10 @@ namespace YelpMain
                 MessageBox.Show("In order to like a tip pls first login!");
                 return;
             }
-
-            string sql = "";
-
+            Tips selectTip = textGird.SelectedItem as Tips;
+            string sql = $"update tips set likes = likes + 1 where business_id = '{this.bid}' and user_id = '{selectTip.user_id}'";
+            Utils.executeQuery(sql, null);
+            loadTips();
         }
     }
 }

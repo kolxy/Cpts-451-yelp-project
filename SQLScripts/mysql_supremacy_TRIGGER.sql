@@ -60,7 +60,7 @@ end;
 'LANGUAGE plpgsql; 
 
 create trigger newtiplike
-after insert on tips
+after update on tips
 for each row
 execute function incre_tiplikes();
 
