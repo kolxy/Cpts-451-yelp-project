@@ -286,6 +286,8 @@ namespace YelpMain
                 sql += $" AND business_id in (select business_id from business_attribute where name in ({string_attr}) and value = 'True' " +
                     $" GROUP BY business_id HAVING count(1) = {selectedAttr.Count}) ";
             }
+            // no, free, paid
+            // very dirty move right there
             if ((bool)(this.WiFi.IsChecked))
             {
                 sql += $" AND business_id in (select business_id from business_attribute where name = 'WiFi' and value = 'free' )";
@@ -424,7 +426,14 @@ namespace YelpMain
 
         private void addInfoListAtt(NpgsqlDataReader reader)
         {
-            infoList.Items.Add("\t" + reader.GetString(0) + ": " + reader.GetString(1));
+            if (reader.GetString(1).Equals("True"))
+            {
+                infoList.Items.Add("\t" + reader.GetString(0));
+            } 
+            else if (!reader.GetString(1).Equals("False"))
+            {
+                infoList.Items.Add($"\t{reader.GetString(0)} ({reader.GetString(1)})");
+            }
         }
 
         private void addHour(NpgsqlDataReader reader)
