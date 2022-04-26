@@ -479,7 +479,27 @@ namespace YelpMain
                 Utils.executeQuery(sql, displayUserInfo);
                 sql = $"select name, total_likes, average_stars, yelp_since from user_follow, the_user where user_follow.friend_id = the_user.user_id and user_follow.user_id = '{Utils.currentUser}' ";
                 Utils.executeQuery(sql, addFriendToList);
-                sql = $"select u.name as user_name, b.name as business_name, b.city, t.text, t.timestamp from user_follow as f, the_user as u, tips as t, business as b where f.friend_id = u.user_id and t.user_id = u.user_id and b.business_id = t.business_id and f.user_id = '{Utils.currentUser}' order by t.timestamp desc ";
+                sql = $@"SELECT
+                        u.NAME AS user_name,
+	                    b.NAME AS business_name,
+	                    b.city,
+	                    T.TEXT,
+	                    T.TIMESTAMP
+                    FROM
+                        user_follow AS f,
+	                    the_user AS u,
+	                    tips AS T,
+	                    (SELECT user_id, MAX(TIMESTAMP) AS TIMESTAMP FROM tips GROUP BY user_id ) AS latest,
+                        business AS b
+                    WHERE
+                        f.friend_id = u.user_id
+                        AND T.user_id = u.user_id
+                        AND b.business_id = T.business_id
+                        AND f.user_id = '{Utils.currentUser}'
+                        AND T.user_id = latest.user_id
+                        AND T.TIMESTAMP = latest.TIMESTAMP 
+                    ORDER BY
+                        T.timestamp DESC"; 
                 Utils.executeQuery(sql, addLatestTipToList);
             }
         }
