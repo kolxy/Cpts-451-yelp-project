@@ -23,8 +23,6 @@ namespace YelpMain
     public partial class MainWindow : Window
     {
         Dictionary<string, bool> attFilter;
-        Dictionary<string, bool> mealFilter;
-        Dictionary<string, bool> priceFilter; 
 
         public MainWindow()
         {
@@ -35,8 +33,6 @@ namespace YelpMain
             initFriendsLatestTipTableHeader();
             initUserId();
             attFilter = new Dictionary<string, bool>();
-            mealFilter = new Dictionary<string, bool>();
-            priceFilter = new Dictionary<string, bool>();
             initFilter();
             initSortBar();
         }
@@ -54,21 +50,11 @@ namespace YelpMain
         private void initFilter()
         {
             List<string> attList = new List<string> { "BusinessAcceptsCreditCards" , "RestaurantsReservations", "WheelchairAccessible",
-            "OutdoorSeating", "RestaurantsGoodForGroups", "RestaurantsDelivery", "RestaurantsTakeOut", "WiFi", "BikeParking"};
+            "OutdoorSeating", "GoodForKids", "RestaurantsGoodForGroups", "RestaurantsDelivery", "RestaurantsTakeOut", "WiFi", "BikeParking",
+            "breakfast", "brunch", "lunch", "dinner", "desert", "latenight","RestaurantsPriceRange1", "RestaurantsPriceRange2", "RestaurantsPriceRange3", "RestaurantsPriceRange4"};
             foreach (string att in attList)
             {
                 this.attFilter.Add(att, false);
-            }
-            List<string> mealList = new List<string> { "breakfast", "brunch", "lunch", "dinner", "desert", "latenight" };
-            foreach (string meal in mealList)
-            {
-                this.mealFilter.Add(meal, false);
-            }
-
-            List<string> priceList = new List<string> { "RestaurantsPriceRange1", "RestaurantsPriceRange2", "RestaurantsPriceRange3", "RestaurantsPriceRange4" };
-            foreach (string price in priceList)
-            {
-                this.priceFilter.Add(price, false);
             }
         }
 
@@ -259,6 +245,7 @@ namespace YelpMain
         {
             businessInfoTable.Items.Clear();
             string sqlstr = ""; // placeholder.
+            markAttributes();
 
             // reverse order check
             // since city only appear when state selected so on so forth... we check from the bottom up using ifelse
@@ -299,13 +286,67 @@ namespace YelpMain
             // highest level, show all business
             else
             {
-                sqlstr = $"select * from business";
+                string att = getAllFiltersInTupleStr();
+                int cnt = getCntAttChecked();
+                string sql1 = $"(select business_id from business_attribute where name in ({att}) GROUP BY business_id HAVING count(1) = {cnt.ToString()})";
+                string sql2 = $"select * from business and business_id in ";
+                sqlstr = sql2 + sql1;
+
             }
 
             Utils.executeQuery(sqlstr, showResult);
             busCnt.Text = businessInfoTable.Items.Count.ToString();
             
         }
+
+        private void markAttributes()
+        {
+            // set dictionary to false each time search
+            foreach (var key in attFilter.Keys.ToList()) { attFilter[key] = false; }
+
+            // mark true when checkbox checked
+            if ((bool)(this.RestaurantsPriceRange1.IsChecked)) { this.attFilter["RestaurantsPriceRange1"] = true; }
+            if ((bool)(this.RestaurantsPriceRange2.IsChecked)) { this.attFilter["RestaurantsPriceRange2"] = true; }
+            if ((bool)(this.RestaurantsPriceRange3.IsChecked)) { this.attFilter["RestaurantsPriceRange3"] = true; }
+            if ((bool)(this.RestaurantsPriceRange4.IsChecked)) { this.attFilter["RestaurantsPriceRange4"] = true; }
+            if ((bool)(this.BusinessAcceptsCreditCards.IsChecked)) { this.attFilter["BusinessAcceptsCreditCards "] = true; }
+            if ((bool)(this.RestaurantsReservations.IsChecked)) { this.attFilter["RestaurantsReservations"] = true; }
+            if ((bool)(this.OutdoorSeating.IsChecked)) { this.attFilter["OutdoorSeating "] = true; }
+            if ((bool)(this.GoodForKids.IsChecked)) { this.attFilter["GoodForKids"] = true; }
+            if ((bool)(this.RestaurantsGoodForGroups.IsChecked)) { this.attFilter["RestaurantsGoodForGroups"] = true; }
+            if ((bool)(this.RestaurantsDelivery.IsChecked)) { this.attFilter["RestaurantsDelivery"] = true; }
+            if ((bool)(this.RestaurantsTakeOut.IsChecked)) { this.attFilter["RestaurantsTakeOut"] = true; }
+            if ((bool)(this.WiFi.IsChecked)) { this.attFilter["WiFi "] = true; }
+            if ((bool)(this.BikeParking.IsChecked)) { this.attFilter["BikeParking"] = true; }
+            if ((bool)(this.breakfast.IsChecked)) { this.attFilter["breakfast "] = true; }
+            if ((bool)(this.brunch.IsChecked)) { this.attFilter["brunch "] = true; }
+            if ((bool)(this.lunch.IsChecked)) { this.attFilter["lunch "] = true; }
+            if ((bool)(this.dinner.IsChecked)) { this.attFilter["dinner "] = true; }
+            if ((bool)(this.desert.IsChecked)) { this.attFilter["desert "] = true; }
+            if ((bool)(this.latenight.IsChecked)) { this.attFilter["latenight"] = true; }
+        }
+
+        private string getAllFiltersInTupleStr()
+        {
+            List<string>  strList = new List<string>();
+            foreach(string key in attFilter.Keys.ToList()){ 
+                if (attFilter[key] == true)
+                {
+                    strList.Append("'" + key + "'");
+                }
+            }
+            string ans = string.Join(",", strList.ToArray());
+            MessageBox.Show(ans);
+            return ans;
+        }
+
+        private int getCntAttChecked()
+        {
+            int cnt = 0;
+            foreach (string key in attFilter.Keys.ToList()) {if (attFilter[key] == true){cnt += 1;}}
+            return cnt;
+        }
+
 
         private void updateDistance()
         {
