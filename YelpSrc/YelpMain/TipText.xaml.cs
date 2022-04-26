@@ -37,7 +37,7 @@ namespace YelpMain
         private void loadTips()
         {
             this.textGird.Items.Clear();
-            string sqlstr = $"SELECT u.name, t.user_id, t.timestamp, t.text,t.likes FROM the_user u, tips t WHERE t.business_id = '{this.bid}' AND t.user_id=u.user_id ORDER BY name;";
+            string sqlstr = $"SELECT u.name, t.user_id, t.timestamp, t.text,t.likes FROM the_user u, tips t WHERE t.business_id = '{this.bid}' AND t.user_id=u.user_id ORDER BY timestamp desc;";
             Console.WriteLine(sqlstr);
             Utils.executeQuery(sqlstr, addGridRow);
         }
@@ -48,7 +48,7 @@ namespace YelpMain
                 MessageBox.Show("In order to add tip pls first login!");
                 return;
             }
-            string sqlstr = $"INSERT INTO tips (business_id, user_id, timestamp, likes, text) values ('{this.bid}', '{Utils.currentUser}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', 0, '{textbox.Text}')";
+            string sqlstr = $@"INSERT INTO tips (business_id, user_id, timestamp, likes, text) values ('{this.bid}', '{Utils.currentUser}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', 0, '{textbox.Text.ToString().Replace("'", "''")}')";
             Console.WriteLine(sqlstr);
             textbox.Text = "";
             Utils.executeQuery(sqlstr, null);
@@ -165,7 +165,7 @@ namespace YelpMain
                 return;
             }
             Tips selectTip = textGird.SelectedItem as Tips;
-            string sql = $"update tips set likes = likes + 1 where business_id = '{this.bid}' and user_id = '{selectTip.user_id}'";
+            string sql = $"update tips set likes = likes + 1 where business_id = '{this.bid}' and user_id = '{selectTip.user_id}' and timestamp = '{selectTip.timestamp}'";
             Utils.executeQuery(sql, null);
             loadTips();
         }
