@@ -10,10 +10,10 @@
         <TextBox x:Name="textbox" HorizontalAlignment="Left" Height="61" Margin="44,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="395" TextChanged="textbox_TextChanged"/>
         <Button x:Name="submitButton" Content="Add Tip&#xA;" HorizontalAlignment="Left" Margin="44,76,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="submitButton_Click"/>
         <Label Content="Business Tips" HorizontalAlignment="Left" Margin="44,103,0,0" VerticalAlignment="Top" Height="26"/>
-        <DataGrid x:Name="textGird" HorizontalAlignment="Left" Height="275" Margin="44,134,0,0" VerticalAlignment="Top" Width="395" SelectionChanged="DataGrid_SelectionChanged"/>
+        <DataGrid x:Name="textGird" HorizontalAlignment="Left" Height="275" Margin="44,134,0,0" VerticalAlignment="Top" Width="395"/>
         <Button x:Name="likeBtn" Content="Like" HorizontalAlignment="Left" Margin="124,76,0,0" VerticalAlignment="Top" Width="74" Height="22" Click="likeBtn_Click"/>
         <GroupBox Header="Friends who review this business" HorizontalAlignment="Left" Height="162" Margin="44,414,0,0" VerticalAlignment="Top" Width="395">
-            <DataGrid HorizontalAlignment="Left" Height="143" Margin="0,0,-2,-3" VerticalAlignment="Top" Width="385"/>
+            <DataGrid x:Name="friendTipList" HorizontalAlignment="Left" Height="143" Margin="0,0,-2,-3" VerticalAlignment="Top" Width="385"/>
         </GroupBox>
 
     </Grid>
