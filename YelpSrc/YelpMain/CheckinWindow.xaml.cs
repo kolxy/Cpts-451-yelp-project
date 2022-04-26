@@ -41,6 +41,7 @@ namespace YelpMain
 
         private void plot()
         {
+            WpfPlot1.Plot.Clear();
             for (int i = 0; i < 12; i++)
             {
                 months[i] = i + 1;
