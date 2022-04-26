@@ -288,6 +288,7 @@ namespace YelpMain
             if (selectedAttr.Count > 0)
             {
                 string string_attr = string.Join(",", selectedAttr.ToArray());
+                // these attributes value [True, False, None] only select True
                 sql += $" AND business_id in (select business_id from business_attribute where name in ({string_attr}) and value = 'True' " +
                     $" GROUP BY business_id HAVING count(1) = {selectedAttr.Count}) ";
             }

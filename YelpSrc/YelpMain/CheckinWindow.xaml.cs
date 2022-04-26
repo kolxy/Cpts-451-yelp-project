@@ -24,7 +24,6 @@ namespace YelpMain
     {
         double[] numChecking = new double[12];
         double [] months = new double[12];
-        Int64 maxYear = 0;
         string businessId; 
         public CheckinWindow()
         {
