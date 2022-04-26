@@ -22,7 +22,7 @@ namespace YelpMain
     /// </summary>
     public partial class MainWindow : Window
     {
-        Dictionary<string, bool> attFilter;
+        List<string> selectedAttr;
 
         public MainWindow()
         {
@@ -32,31 +32,18 @@ namespace YelpMain
             initUserFriendTableHeader();
             initFriendsLatestTipTableHeader();
             initUserId();
-            attFilter = new Dictionary<string, bool>();
-            initFilter();
-            initSortBar();
         }
 
-        private void initSortBar()
-        {
-            sortList.Items.Add("Name (default)");
-            sortList.Items.Add("Highest rated");
-            sortList.Items.Add("Most number of tips");
-            sortList.Items.Add("Most checkings");
-            sortList.Items.Add("Nearest");
-            sortList.SelectedIndex = 0;
-        }
-
-        private void initFilter()
-        {
-            List<string> attList = new List<string> { "BusinessAcceptsCreditCards" , "RestaurantsReservations", "WheelchairAccessible",
-            "OutdoorSeating", "GoodForKids", "RestaurantsGoodForGroups", "RestaurantsDelivery", "RestaurantsTakeOut", "WiFi", "BikeParking",
-            "breakfast", "brunch", "lunch", "dinner", "desert", "latenight","RestaurantsPriceRange1", "RestaurantsPriceRange2", "RestaurantsPriceRange3", "RestaurantsPriceRange4"};
-            foreach (string att in attList)
-            {
-                this.attFilter.Add(att, false);
-            }
-        }
+        // Written directly in front end
+        //private void initSortBar()
+        //{
+        //    sortList.Items.Add("Name (default)");
+        //    sortList.Items.Add("Highest rated");
+        //    sortList.Items.Add("Most number of tips");
+        //    sortList.Items.Add("Most checkings");
+        //    sortList.Items.Add("Nearest");
+        //    sortList.SelectedIndex = 0;
+        //}
 
         /// <summary>
         /// Init the states available in db.
@@ -244,109 +231,92 @@ namespace YelpMain
         private void searchBusBtn_Click(object sender, RoutedEventArgs e)
         {
             businessInfoTable.Items.Clear();
-            string sqlstr = ""; // placeholder.
             markAttributes();
 
-            // reverse order check
-            // since city only appear when state selected so on so forth... we check from the bottom up using ifelse
+            string sql = $@"
+                SELECT
+                    business.*,
+	                getdistance ( latitude, longitude, lat2, long2 ) AS distance
+                FROM
+	                business
+	                FULL OUTER JOIN ( SELECT latitude AS lat2, longtiude AS long2 FROM the_user WHERE user_id = 'FgQCX3ztjhellw2hyRedxg' ) AS res ON 1 = 1
+                WHERE
+	                1 = 1 "; // 1=1 for placeholder
+
+            if (stateList.SelectedIndex >= 0)
+            {
+                sql += $" AND state = '{stateList.SelectedItem.ToString()}' ";
+            }
+
+            if (cityList.SelectedIndex >= 0)
+            {
+                sql += $" AND city = '{cityList.SelectedItem.ToString()}' ";
+            }
+
+            if (zipList.SelectedIndex >= 0)
+            {
+                sql += $" AND zipcode = '{zipList.SelectedItem.ToString()}' ";
+            }
+
             if (selectedCatList.Items.Count > 0)
             {
-                // shows all of busienss with state, city, zipcode provided
-                string sql1 = $"select * from business where" +
-                    $" state = '{stateList.SelectedItem.ToString()}' and city = '{cityList.SelectedItem.ToString()}'" +
-                    $" and zipcode = '{zipList.SelectedItem.ToString()}' and business_id in ";
-
                 List<string> cats = new List<string>();
                 foreach (var item in selectedCatList.Items)
                 {
                     cats.Add("'" + item.ToString() + "'");
                 }
                 string string_cats = string.Join(",", cats.ToArray());
-                string sql2 = $"(select business_id from business_category where name in ({string_cats}) GROUP BY business_id HAVING count(1) = {selectedCatList.Items.Count})";
-                sqlstr = sql1 + sql2;
-            }
-            // search zip, city, state
-            else if (zipList.SelectedIndex >= 0)
-            {
-                sqlstr = $"select * from business where" +
-                    $" state = '{stateList.SelectedItem.ToString()}' and city = '{cityList.SelectedItem.ToString()}'" +
-                    $" and zipcode = '{zipList.SelectedItem.ToString()}'";
-            }
-            // search city, state
-            else if (cityList.SelectedIndex >= 0)
-            {
-                sqlstr = $"select * from business where" +
-                    $" state = '{stateList.SelectedItem.ToString()}' and city = '{cityList.SelectedItem.ToString()}'";
-            }
-            // search state
-            else if (stateList.SelectedIndex >= 0)
-            {
-                sqlstr = $"select * from business where state = '{stateList.SelectedItem.ToString()}'";
-            }
-            // highest level, show all business
-            else
-            {
-                string att = getAllFiltersInTupleStr();
-                int cnt = getCntAttChecked();
-                string sql1 = $"(select business_id from business_attribute where name in ({att}) GROUP BY business_id HAVING count(1) = {cnt.ToString()})";
-                string sql2 = $"select * from business and business_id in ";
-                sqlstr = sql2 + sql1;
-
+                sql += $" AND business_id in (select business_id from business_category where name in ({string_cats}) GROUP BY business_id HAVING count(1) = {selectedCatList.Items.Count}) ";
             }
 
-            Utils.executeQuery(sqlstr, showResult);
+            if (price1.IsChecked == true || price2.IsChecked == true || price3.IsChecked == true || price4.IsChecked == true)
+            {
+                List<string> prices = new List<string>();
+                if (price1.IsChecked == true) { prices.Add("'1'"); }
+                if (price2.IsChecked == true) { prices.Add("'2'"); }
+                if (price3.IsChecked == true) { prices.Add("'3'"); }
+                if (price4.IsChecked == true) { prices.Add("'4'"); }
+                string string_prices = string.Join(",", prices.ToArray());
+                sql += $" AND business_id in (select business_id from business_attribute where name = 'RestaurantsPriceRange2' and value in ({string_prices}) " +
+                    $" GROUP BY business_id HAVING count(1) = {prices.Count}) ";
+            }
+            if (selectedAttr.Count > 0)
+            {
+                string string_attr = string.Join(",", selectedAttr.ToArray());
+                sql += $" AND business_id in (select business_id from business_attribute where name in ({string_attr}) and value = 'True' " +
+                    $" GROUP BY business_id HAVING count(1) = {selectedAttr.Count}) ";
+            }
+            if ((bool)(this.WiFi.IsChecked))
+            {
+                sql += $" AND business_id in (select business_id from business_attribute where name = 'WiFi' and value = 'free' )";
+            }
+
+            sql += $" ORDER BY {((ComboBoxItem)sortList.SelectedItem).Tag.ToString()}";
+            Console.WriteLine(sql);
+            Utils.executeQuery(sql, showResult);
             busCnt.Text = businessInfoTable.Items.Count.ToString();
-            
         }
 
         private void markAttributes()
         {
-            // set dictionary to false each time search
-            foreach (var key in attFilter.Keys.ToList()) { attFilter[key] = false; }
+            selectedAttr = new List<string>();
 
             // mark true when checkbox checked
-            if ((bool)(this.RestaurantsPriceRange1.IsChecked)) { this.attFilter["RestaurantsPriceRange1"] = true; }
-            if ((bool)(this.RestaurantsPriceRange2.IsChecked)) { this.attFilter["RestaurantsPriceRange2"] = true; }
-            if ((bool)(this.RestaurantsPriceRange3.IsChecked)) { this.attFilter["RestaurantsPriceRange3"] = true; }
-            if ((bool)(this.RestaurantsPriceRange4.IsChecked)) { this.attFilter["RestaurantsPriceRange4"] = true; }
-            if ((bool)(this.BusinessAcceptsCreditCards.IsChecked)) { this.attFilter["BusinessAcceptsCreditCards "] = true; }
-            if ((bool)(this.RestaurantsReservations.IsChecked)) { this.attFilter["RestaurantsReservations"] = true; }
-            if ((bool)(this.OutdoorSeating.IsChecked)) { this.attFilter["OutdoorSeating "] = true; }
-            if ((bool)(this.GoodForKids.IsChecked)) { this.attFilter["GoodForKids"] = true; }
-            if ((bool)(this.RestaurantsGoodForGroups.IsChecked)) { this.attFilter["RestaurantsGoodForGroups"] = true; }
-            if ((bool)(this.RestaurantsDelivery.IsChecked)) { this.attFilter["RestaurantsDelivery"] = true; }
-            if ((bool)(this.RestaurantsTakeOut.IsChecked)) { this.attFilter["RestaurantsTakeOut"] = true; }
-            if ((bool)(this.WiFi.IsChecked)) { this.attFilter["WiFi "] = true; }
-            if ((bool)(this.BikeParking.IsChecked)) { this.attFilter["BikeParking"] = true; }
-            if ((bool)(this.breakfast.IsChecked)) { this.attFilter["breakfast "] = true; }
-            if ((bool)(this.brunch.IsChecked)) { this.attFilter["brunch "] = true; }
-            if ((bool)(this.lunch.IsChecked)) { this.attFilter["lunch "] = true; }
-            if ((bool)(this.dinner.IsChecked)) { this.attFilter["dinner "] = true; }
-            if ((bool)(this.desert.IsChecked)) { this.attFilter["desert "] = true; }
-            if ((bool)(this.latenight.IsChecked)) { this.attFilter["latenight"] = true; }
+            if ((bool)(this.BusinessAcceptsCreditCards.IsChecked)) { selectedAttr.Add("'BusinessAcceptsCreditCards'"); }
+            if ((bool)(this.RestaurantsReservations.IsChecked)) { selectedAttr.Add("'RestaurantsReservations'"); }
+            if ((bool)(this.OutdoorSeating.IsChecked)) { selectedAttr.Add("'OutdoorSeating'"); }
+            if ((bool)(this.GoodForKids.IsChecked)) { selectedAttr.Add("'GoodForKids'"); }
+            if ((bool)(this.RestaurantsGoodForGroups.IsChecked)) { selectedAttr.Add("'RestaurantsGoodForGroups'"); }
+            if ((bool)(this.RestaurantsDelivery.IsChecked)) { selectedAttr.Add("'RestaurantsDelivery'"); }
+            if ((bool)(this.RestaurantsTakeOut.IsChecked)) { selectedAttr.Add("'RestaurantsTakeOut'"); }
+            if ((bool)(this.BikeParking.IsChecked)) { selectedAttr.Add("'BikeParking'"); }
+            if ((bool)(this.breakfast.IsChecked)) { selectedAttr.Add("'breakfast'"); }
+            if ((bool)(this.brunch.IsChecked)) { selectedAttr.Add("'brunch'"); }
+            if ((bool)(this.lunch.IsChecked)) { selectedAttr.Add("'lunch'"); }
+            if ((bool)(this.dinner.IsChecked)) { selectedAttr.Add("'dinner'"); }
+            if ((bool)(this.desert.IsChecked)) { selectedAttr.Add("'desert'"); }
+            if ((bool)(this.latenight.IsChecked)) { selectedAttr.Add("'latenight'"); }
         }
-
-        private string getAllFiltersInTupleStr()
-        {
-            List<string>  strList = new List<string>();
-            foreach(string key in attFilter.Keys.ToList()){ 
-                if (attFilter[key] == true)
-                {
-                    strList.Append("'" + key + "'");
-                }
-            }
-            string ans = string.Join(",", strList.ToArray());
-            MessageBox.Show(ans);
-            return ans;
-        }
-
-        private int getCntAttChecked()
-        {
-            int cnt = 0;
-            foreach (string key in attFilter.Keys.ToList()) {if (attFilter[key] == true){cnt += 1;}}
-            return cnt;
-        }
-
 
         private void updateDistance()
         {
@@ -377,7 +347,7 @@ namespace YelpMain
             bus.num_checkings = reader.GetInt64(9);
             bus.num_tips = reader.GetInt64(10);
             bus.is_open = reader.GetBoolean(11);
-            
+            bus.distance = reader.GetDouble(12);
             /*
             Utils.currentBus = bus;
             updateDistance();
