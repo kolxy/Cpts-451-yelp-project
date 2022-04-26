@@ -30,6 +30,8 @@ namespace YelpMain
             InitializeComponent();
             loadTips();
             addColumnsToGrid();
+            addColumnsToGrid2();
+            loadFriendReview();
         }
 
         private void loadTips()
@@ -73,29 +75,53 @@ namespace YelpMain
             col1.Width = 100;
             textGird.Columns.Add(col1);
 
-            DataGridTextColumn col2 = new DataGridTextColumn();
-            col2.Binding = new Binding("user_id");
-            col2.Header = "UserID";
-            col2.Width = 100;
-            textGird.Columns.Add(col2);
-
             DataGridTextColumn col3 = new DataGridTextColumn();
             col3.Binding = new Binding("timestamp");
             col3.Header = "Date";
             col3.Width = 100;
             textGird.Columns.Add(col3);
 
-            DataGridTextColumn col4 = new DataGridTextColumn();
-            col4.Binding = new Binding("text");
-            col4.Header = "Text";
-            col4.Width = 100;
-            textGird.Columns.Add(col4);
-
             DataGridTextColumn col5 = new DataGridTextColumn();
             col5.Binding = new Binding("likes");
             col5.Header = "Likes";
-            col5.Width = 100;
+            col5.Width = 30;
             textGird.Columns.Add(col5);
+
+            DataGridTextColumn col4 = new DataGridTextColumn();
+            col4.Binding = new Binding("text");
+            col4.Header = "Text";
+            col4.Width = 170;
+            textGird.Columns.Add(col4);
+
+           
+
+            DataGridTextColumn col2 = new DataGridTextColumn();
+            col2.Binding = new Binding("user_id");
+            col2.Header = "UserID";
+            col2.Width = 0;
+            textGird.Columns.Add(col2);
+        }
+
+        private void addColumnsToGrid2()
+        {
+            DataGridTextColumn col1 = new DataGridTextColumn();
+            col1.Binding = new Binding("username");
+            col1.Header = "Name";
+            col1.Width = 80;
+            friendTipList.Columns.Add(col1);
+
+            DataGridTextColumn col2 = new DataGridTextColumn();
+            col2.Binding = new Binding("timestamp");
+            col2.Header = "Date";
+            col2.Width = 150;
+            friendTipList.Columns.Add(col2);
+
+            DataGridTextColumn col3 = new DataGridTextColumn();
+            col3.Binding = new Binding("text");
+            col3.Header = "Text";
+            col3.Width = 170;
+            friendTipList.Columns.Add(col3);
+
         }
 
         private void textbox_TextChanged(object sender, TextChangedEventArgs e)
@@ -103,18 +129,42 @@ namespace YelpMain
             this.text = textbox.Text;
         }
 
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void loadFriendReview()
         {
-
+            if (Utils.currentUser.Length <= 0)
+            {
+                return;
+            }
+            string sql = $"select name, timestamp, text from the_user, (select user_id, timestamp, text from tips where business_id = '{this.bid}' and user_id in (select friend_id from user_follow where user_id ='{Utils.currentUser}')) as friend where the_user.user_id = friend.user_id";
+            Utils.executeQuery(sql, updateFriendReview);
+        }
+        
+        private void updateFriendReview(NpgsqlDataReader R)
+        {
+            friendTipList.Items.Add(new Tips()
+            {
+                username = R.GetString(0),
+                timestamp = R.GetDateTime(1).ToString(),
+                text = R.GetString(2),
+            });
+            
         }
 
         private void likeBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (textGird.SelectedIndex < 0)
+            {
+                MessageBox.Show("In order to like a tip please first select a tip!");
+                return;
+            }
+
             if (Utils.currentUser.Length <= 0)
             {
                 MessageBox.Show("In order to like a tip pls first login!");
                 return;
             }
+
+            string sql = "";
 
         }
     }
