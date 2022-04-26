@@ -414,6 +414,7 @@ namespace YelpMain
 
         private void addInfoListAtt(NpgsqlDataReader reader)
         {
+            /*
             if (reader.GetString(1).Equals("True"))
             {
                 infoList.Items.Add("\t" + reader.GetString(0));
@@ -421,6 +422,22 @@ namespace YelpMain
             else if (!reader.GetString(1).Equals("False"))
             {
                 infoList.Items.Add($"\t{reader.GetString(0)} ({reader.GetString(1)})");
+            }*/
+
+
+            // just put it here instead member variable for simplicify modification and review.
+            HashSet<string> badKeyWords = new HashSet<string> { "no", "False", "none", "{}"};
+            if (!badKeyWords.Contains(reader.GetString(1))){
+                // no show value for value True
+                if (reader.GetString(1) != "True")
+                {
+                    infoList.Items.Add("\t" + reader.GetString(0) + "(" + reader.GetString(1) + ")");
+                }
+                else
+                {
+                    infoList.Items.Add("\t" + reader.GetString(0));
+                }
+                 
             }
         }
 
